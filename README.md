@@ -1,59 +1,186 @@
-# CentroSalud
+# Centro Virtual de Salud Pública — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
+Portal web del Centro Virtual de Salud Pública, plataforma de articulación y gestión del conocimiento
+para la Universidad de Caldas.
 
-## Development server
+Proyecto Integrador II · Ingeniería de Sistemas · agosto–diciembre 2026
 
-To start a local development server, run:
+| | |
+|---|---|
+| **Backend** | [back-centro-salud](https://github.com/oxjhony/back-centro-salud) |
+| **Equipo** | Juan Pablo Pulgarín ([@JuanIIDX](https://github.com/JuanIIDX)) · Jhony Alejandro Pérez ([@Oxjhony](https://github.com/Oxjhony)) |
+| **Empresa aliada** | Universidad de Caldas |
+
+---
+
+## Qué resuelve
+
+La Universidad presenta dispersión de experiencias, productos y recursos de salud pública entre
+proyectos, grupos, cursos y territorios, lo que reduce la visibilidad del trabajo y dificulta
+encontrar evidencia y oportunidades formativas.
+
+Este portal es la cara visible de la solución: permite descubrir iniciativas y recursos, encontrar
+oferta formativa, participar en consultas y administrar el flujo editorial.
+
+---
+
+## Stack
+
+| Aspecto | Tecnología |
+|---|---|
+| Framework | Angular 21 · TypeScript |
+| Renderizado | SSR — el proyecto se sirve como aplicación de servidor |
+| Estilos | SCSS |
+| Pruebas | Vitest · Playwright para recorridos críticos |
+
+> **El renderizado en servidor está activo** (`outputMode: "server"` en `angular.json`). No es un sitio
+> estático: se despliega como servidor Node. Se conserva así porque el objetivo del proyecto es
+> *visibilizar* el trabajo en salud pública, y el renderizado en servidor mejora la indexación y la
+> primera carga en conexiones limitadas.
+
+---
+
+## Requisitos previos
+
+- Node.js 22 o superior
+- El backend corriendo en `http://localhost:3000`
+
+---
+
+## Instalación
 
 ```bash
-ng serve
+git clone https://github.com/oxjhony/front-centro-salud.git
+cd front-centro-salud
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Variables de entorno
 
-## Code scaffolding
+| Variable | Descripción | Ejemplo |
+|---|---|---|
+| `API_BASE_URL` | URL de la API | `http://localhost:3000` |
+| `PORT` | Puerto del servidor SSR | `4000` |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
+
+## Ejecución
 
 ```bash
-ng generate component component-name
+npm start                      # servidor de desarrollo en http://localhost:4200
+npm run build                  # compilación de producción
+npm run serve:ssr:centro-salud # servidor SSR sobre el build
+npm run watch                  # compilación continua
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
+
+## Pruebas
 
 ```bash
-ng generate --help
+npm test                # unitarias con Vitest
+npx playwright test     # recorridos críticos de extremo a extremo
 ```
 
-## Building
+Los cinco recorridos prioritarios deben tener prueba automatizada antes del cierre del proyecto:
 
-To build the project run:
+| # | Recorrido |
+|---|---|
+| R1 | Descubrir conocimiento |
+| R2 | Publicar una iniciativa |
+| R3 | Encontrar formación |
+| R4 | Participar en una consulta |
+| R5 | Administrar el centro |
 
-```bash
-ng build
+---
+
+## Lineamientos de interfaz
+
+No son preferencias de estilo: son requisitos verificables de la especificación.
+
+- **Móvil primero.** Usable desde 360 px de ancho. Máximo dos niveles principales de menú.
+- **Accesibilidad WCAG 2.2 nivel AA** en las vistas del MVP.
+- **Navegación completa por teclado**, con foco visible y no oculto.
+- **El color nunca es el único portador de información**: estados, errores y prioridades necesitan
+  además texto o forma.
+- **Estados explícitos** para borrador, en revisión, publicado, archivado y rechazado.
+- **Formularios** con guardado de borrador, mensajes de error asociados al campo y confirmación antes
+  de acciones críticas.
+- **Estados vacíos comprensibles**: cuando no hay resultados, explicar por qué y qué hacer, nunca
+  dejar la página en blanco.
+- **Multimedia** con texto alternativo, subtítulos o transcripciones.
+- **Lenguaje ciudadano.** Evitar tecnicismos o explicarlos cuando sean indispensables.
+
+> La conformidad de accesibilidad **no se demuestra con una puntuación automática**. Requiere además
+> verificación manual de teclado, foco, formularios y contraste, y pruebas con lector de pantalla en
+> los recorridos críticos.
+
+---
+
+## Estructura
+
+```
+src/
+├── app/
+│   ├── core/       # servicios transversales, interceptores, guardas
+│   ├── shared/     # componentes reutilizables
+│   └── features/   # módulos por dominio
+├── main.ts         # arranque del cliente
+├── main.server.ts  # arranque del servidor
+└── server.ts       # servidor Express para SSR
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Flujo de trabajo
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Ramas cortas y solicitudes de cambio con revisión por pares.
 
-```bash
-ng test
+```
+main                 # siempre desplegable
+└── tipo/H-nn-descripcion-corta
 ```
 
-## Running end-to-end tests
+| Prefijo | Para |
+|---|---|
+| `feat/` | Funcionalidad nueva |
+| `fix/` | Corrección |
+| `chore/` | Configuración, dependencias, herramientas |
+| `docs/` | Documentación |
 
-For end-to-end (e2e) testing, run:
+Ejemplo: `feat/H-15-ficha-publica-iniciativa`
 
-```bash
-ng e2e
+### Commits
+
+```
+tipo(alcance): descripción en imperativo
+
+feat(buscador): agregar filtro por territorio
+fix(a11y): corregir orden de foco en el formulario de iniciativa
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Solicitudes de cambio
 
-## Additional Resources
+Siendo un equipo de dos, **quien escribe no revisa**: toda rama se integra mediante solicitud de cambio
+revisada por el otro integrante.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Una solicitud se puede integrar cuando:
+
+- [ ] Está vinculada a una historia del backlog (`Closes #nn`)
+- [ ] Las pruebas pasan
+- [ ] Se verificó navegación por teclado y foco visible
+- [ ] Se verificó en 360 px de ancho
+- [ ] Los estados vacíos y de error están resueltos
+- [ ] La revisó el otro integrante
+
+---
+
+## Documentación del proyecto
+
+| Documento | Dónde |
+|---|---|
+| Especificación Ejecutable v1 | `Entregables/Semana-02/` |
+| Product Backlog | `Entregables/Semana-02/` |
+| Playbook de orquestación de IA | `Entregables/Semana-04/` |
+
+La Especificación Ejecutable es la fuente de verdad del proyecto.
