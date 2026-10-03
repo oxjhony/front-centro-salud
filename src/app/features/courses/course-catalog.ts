@@ -15,6 +15,7 @@ import { CourseAccessView } from './course-access';
   imports: [FormsModule, RouterLink, LabelPipe, CourseAccessView, Pager, TermTags],
   template: `
     <h1>Cursos</h1>
+    <p class="lead">Cursos, microcursos y diplomados. Cada ficha te lleva al aula virtual o te explica cómo ingresar.</p>
 
     <form class="filters" role="search" (ngSubmit)="apply()">
       <div class="field">
@@ -57,8 +58,10 @@ import { CourseAccessView } from './course-access';
           }
         </select>
       </div>
-      <button type="submit">Buscar</button>
-      <button type="button" class="secondary" (click)="clear()">Limpiar</button>
+      <div class="filter-actions">
+        <button type="submit">Buscar</button>
+        <button type="button" class="secondary" [class.beacon]="result()?.total === 0" (click)="clear()">Limpiar</button>
+      </div>
     </form>
 
     @if (error()) {
@@ -67,7 +70,7 @@ import { CourseAccessView } from './course-access';
       <p class="meta" aria-live="polite">{{ page.total }} {{ page.total === 1 ? 'curso' : 'cursos' }}</p>
 
       @if (page.total === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>No hay cursos con esos criterios.</strong></p>
           <p>Prueba con otro tema o modalidad, o quita los filtros con el botón «Limpiar».</p>
         </div>
@@ -87,14 +90,17 @@ import { CourseAccessView } from './course-access';
               </p>
               <p>{{ course.summary }}</p>
               <app-term-tags [terms]="course.terms" />
-              <app-course-access [access]="course.access" [courseTitle]="course.title" />
+              <!-- La instruccion de acceso se lee en la ficha del curso; la tarjeta solo ofrece el aula. -->
+              @if (course.access.kind !== 'INSTRUCTIONS') {
+                <app-course-access [access]="course.access" [courseTitle]="course.title" />
+              }
             </li>
           }
         </ul>
         <app-pager [page]="page" />
       }
     } @else {
-      <p>Cargando cursos…</p>
+      <p class="loading" role="status">Cargando cursos…</p>
     }
   `,
 })

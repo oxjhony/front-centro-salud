@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Api, errorMessage } from '../../core/api';
 import { CourseDetail, InitiativeDetail, PublishableEntity, ResourceDetail, TermRef } from '../../core/models';
 import { EditorialPanel } from '../../shared/editorial-panel';
@@ -10,18 +9,18 @@ import { namesOf } from '../../shared/taxonomy';
 /** El revisor lee el contenido completo y decide: tomar, devolver, aprobar, rechazar o publicar. */
 @Component({
   selector: 'app-review-detail',
-  imports: [RouterLink, DatePipe, LabelPipe, FileSizePipe, EditorialPanel],
+  imports: [DatePipe, LabelPipe, FileSizePipe, EditorialPanel],
   template: `
-    <p><a routerLink="/revision">← Bandeja de revisión</a></p>
-
     @if (error()) {
       <p class="notice error" role="alert">{{ error() }}</p>
     }
 
+    <div class="editor-layout">
+      <div>
     @if (initiative(); as item) {
       <h1>{{ item.title }}</h1>
       <p class="meta">Iniciativa · {{ item.type | label }}</p>
-      <p>{{ item.summary }}</p>
+      <p class="lead">{{ item.summary }}</p>
       <dl class="details">
         <dt>Autores</dt>
         <dd>{{ authorNames(item) }}</dd>
@@ -45,7 +44,7 @@ import { namesOf } from '../../shared/taxonomy';
     @if (resource(); as item) {
       <h1>{{ item.title }}</h1>
       <p class="meta">Recurso · {{ item.visibility | label }} · Licencia {{ item.license }}</p>
-      <p>{{ item.description }}</p>
+      <p class="lead">{{ item.description }}</p>
       <dl class="details">
         <dt>Autor</dt>
         <dd>{{ item.ownerName }}</dd>
@@ -66,7 +65,7 @@ import { namesOf } from '../../shared/taxonomy';
     @if (course(); as item) {
       <h1>{{ item.title }}</h1>
       <p class="meta">Curso · {{ item.type | label }} · {{ item.modality | label }}</p>
-      <p>{{ item.summary }}</p>
+      <p class="lead">{{ item.summary }}</p>
       <dl class="details">
         <dt>Clasificación</dt>
         <dd>{{ names(item.terms) || 'Sin clasificar' }}</dd>
@@ -86,9 +85,14 @@ import { namesOf } from '../../shared/taxonomy';
       </dl>
     }
 
-    @if (state(); as current) {
-      <app-editorial-panel [entityType]="entityType()" [entityId]="id()" [state]="current" (changed)="state.set($event)" />
-    }
+      </div>
+
+      @if (state(); as current) {
+        <aside>
+          <app-editorial-panel [entityType]="entityType()" [entityId]="id()" [state]="current" (changed)="state.set($event)" />
+        </aside>
+      }
+    </div>
   `,
 })
 export class ReviewDetail implements OnInit {

@@ -2,20 +2,23 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api, errorMessage } from '../../core/api';
 import { CourseSummary } from '../../core/models';
+import { Icon } from '../../shared/icon';
 import { LabelPipe, linkStatusLabel } from '../../shared/labels';
 
 @Component({
   selector: 'app-my-courses',
-  imports: [RouterLink, LabelPipe],
+  imports: [RouterLink, LabelPipe, Icon],
   template: `
     <h1>Mis cursos</h1>
-    <p><a class="button" routerLink="/mis-cursos/nuevo">Nueva ficha de curso</a></p>
+    <p>
+      <a class="button" [class.beacon]="courses()?.length === 0" routerLink="/mis-cursos/nuevo"><app-icon name="plus" />Nueva ficha de curso</a>
+    </p>
 
     @if (error()) {
       <p class="notice error" role="alert">{{ error() }}</p>
     } @else if (courses(); as items) {
       @if (items.length === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>Todavía no has creado fichas de curso.</strong></p>
           <p>Crea la primera con el botón «Nueva ficha de curso» y enlázala con su aula en Moodle.</p>
         </div>
@@ -42,7 +45,7 @@ import { LabelPipe, linkStatusLabel } from '../../shared/labels';
         </div>
       }
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

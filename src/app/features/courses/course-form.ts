@@ -19,16 +19,18 @@ const TERM_TYPES: TaxonomyType[] = ['THEME', 'POPULATION', 'TERRITORY', 'TAG'];
   selector: 'app-course-form',
   imports: [FormsModule, RouterLink, DatePipe, LabelPipe, EditorialPanel, TermPicker, RelatedPicker],
   template: `
-    <p><a routerLink="/mis-cursos">← Mis cursos</a></p>
     <h1>{{ id() ? 'Editar ficha de curso' : 'Nueva ficha de curso' }}</h1>
 
     @if (!editable()) {
       <p class="notice">Esta ficha está en «{{ state() | label }}» y no se puede editar.</p>
     }
 
+    <div class="editor-layout">
+      <div>
     @if (catalogs(); as options) {
-      <form (ngSubmit)="save()">
-        <fieldset [disabled]="!editable() || busy()" style="border: 0; padding: 0; max-width: none">
+      <form class="panel form-panel" (ngSubmit)="save()">
+        <fieldset [disabled]="!editable() || busy()" class="plain">
+          <p class="hint">Los campos marcados con <span aria-hidden="true">*</span><span class="visually-hidden">asterisco</span> son obligatorios.</p>
           <div class="field">
             <label for="title">Nombre del curso</label>
             <input id="title" name="title" type="text" required minlength="3" maxlength="255" [(ngModel)]="model.title" />
@@ -101,11 +103,12 @@ const TERM_TYPES: TaxonomyType[] = ['THEME', 'POPULATION', 'TERRITORY', 'TAG'];
 
           <div class="actions">
             <button type="submit">{{ busy() ? 'Guardando y verificando…' : 'Guardar borrador' }}</button>
+            <a class="button secondary" routerLink="/mis-cursos">Volver a mis cursos</a>
           </div>
         </fieldset>
       </form>
     } @else if (!error()) {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
 
     @if (saved()) {
@@ -137,9 +140,14 @@ const TERM_TYPES: TaxonomyType[] = ['THEME', 'POPULATION', 'TERRITORY', 'TAG'];
       </section>
     }
 
-    @if (id(); as courseId) {
-      <app-editorial-panel entityType="courses" [entityId]="courseId" [state]="state()" (changed)="state.set($event)" />
-    }
+      </div>
+
+      @if (id(); as courseId) {
+        <aside>
+          <app-editorial-panel entityType="courses" [entityId]="courseId" [state]="state()" (changed)="state.set($event)" />
+        </aside>
+      }
+    </div>
   `,
 })
 export class CourseForm implements OnInit {

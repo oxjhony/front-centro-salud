@@ -10,13 +10,11 @@ import { namesOf } from '../../shared/taxonomy';
   selector: 'app-initiative-detail',
   imports: [RouterLink, LabelPipe],
   template: `
-    <p><a routerLink="/iniciativas">← Todas las iniciativas</a></p>
-
     @if (initiative(); as item) {
       <article>
         <h1>{{ item.title }}</h1>
         <p class="meta">{{ item.type | label }}</p>
-        <p>{{ item.summary }}</p>
+        <p class="lead">{{ item.summary }}</p>
 
         <dl class="details">
           @for (group of groups; track group.type) {
@@ -66,7 +64,7 @@ import { namesOf } from '../../shared/taxonomy';
       <h1>Iniciativa no disponible</h1>
       <p>Esta iniciativa no existe o todavía no está publicada.</p>
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

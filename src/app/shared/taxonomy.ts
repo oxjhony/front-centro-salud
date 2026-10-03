@@ -65,7 +65,7 @@ export class TermPicker {
       <ul class="related-list">
         @for (option of options(); track option.id) {
           <li>
-            <label style="font-weight: 400">
+            <label>
               <input type="checkbox" [checked]="selected().includes(option.id)" (change)="selected.set(toggle(selected(), option.id))" />
               {{ option.title }}
               @if (option.state !== 'PUBLISHED') {

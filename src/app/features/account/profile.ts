@@ -17,8 +17,9 @@ import { Profile, ProfileInput } from '../../core/models';
     @if (profile(); as current) {
       <p class="meta">Correo: {{ current.email }} · Última actualización: {{ current.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</p>
 
-      <form (ngSubmit)="save()">
-        <fieldset [disabled]="busy()" style="border: 0; padding: 0; max-width: none">
+      <form class="panel form-panel" (ngSubmit)="save()">
+        <fieldset [disabled]="busy()" class="plain">
+          <p class="hint">Los campos marcados con <span aria-hidden="true">*</span><span class="visually-hidden">asterisco</span> son obligatorios.</p>
           <div class="field">
             <label for="displayName">Nombre para mostrar</label>
             <input id="displayName" name="displayName" type="text" required minlength="2" maxlength="150" [(ngModel)]="model.displayName" />
@@ -51,7 +52,7 @@ import { Profile, ProfileInput } from '../../core/models';
         </fieldset>
       </form>
     } @else if (!error()) {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
 
     @if (notice()) {

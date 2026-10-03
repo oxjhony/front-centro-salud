@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Api } from '../../core/api';
 import { AuthService } from '../../core/auth';
 import { PublicResource, TaxonomyType } from '../../core/models';
+import { Icon } from '../../shared/icon';
 import { FileSizePipe, LabelPipe } from '../../shared/labels';
 import { namesOf } from '../../shared/taxonomy';
 
@@ -13,15 +14,13 @@ import { namesOf } from '../../shared/taxonomy';
  */
 @Component({
   selector: 'app-resource-detail',
-  imports: [RouterLink, DatePipe, LabelPipe, FileSizePipe],
+  imports: [RouterLink, DatePipe, LabelPipe, FileSizePipe, Icon],
   template: `
-    <p><a routerLink="/recursos">← Todos los recursos</a></p>
-
     @if (resource(); as item) {
       <article>
         <h1>{{ item.title }}</h1>
         <p class="meta">{{ item.visibility | label }} · Licencia {{ item.license }}</p>
-        <p>{{ item.description }}</p>
+        <p class="lead">{{ item.description }}</p>
 
         <dl class="details">
           <dt>Autoría</dt>
@@ -47,7 +46,7 @@ import { namesOf } from '../../shared/taxonomy';
           @if (item.visibility === 'PUBLIC' || auth.isAuthenticated()) {
             <p>
               <a class="button" [href]="downloadUrl(item)" download>
-                <i class="fa-solid fa-download" aria-hidden="true"></i> Descargar<span class="visually-hidden"> {{ item.title }}</span>
+                <app-icon name="download" />Descargar<span class="visually-hidden"> {{ item.title }}</span>
               </a>
             </p>
           } @else {
@@ -81,7 +80,7 @@ import { namesOf } from '../../shared/taxonomy';
       <h1>Recurso no disponible</h1>
       <p>Este recurso no existe o todavía no está publicado.</p>
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

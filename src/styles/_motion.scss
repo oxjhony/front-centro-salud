@@ -1,0 +1,241 @@
+/*
+ * Movimiento con propósito: cada animación responde una pregunta de quien usa el portal.
+ *   - ¿Dónde estoy?        El marcador dorado se desliza a la sección actual.
+ *   - ¿Pasó algo?          La campana pulsa cuando hay avisos nuevos.
+ *   - ¿Qué sigue?          El siguiente paso recomendado queda rodeado por un halo dorado.
+ *   - ¿Está trabajando?    Cargando, guardado y cambios de página se ven.
+ *
+ * Reglas (WCAG 2.2.2 y 2.3.3):
+ *   - Los pulsos se repiten tres veces (menos de cinco segundos) y se detienen solos.
+ *   - Nada parpadea más de tres veces por segundo.
+ *   - Con «reducir movimiento» activo en el sistema, todo queda quieto y sigue entendiéndose.
+ */
+
+@keyframes uc-subir {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes uc-aparecer {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  60% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes uc-onda {
+  from {
+    opacity: 0.9;
+    transform: scale(0.6);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+@keyframes uc-halo {
+  from {
+    box-shadow: 0 0 0 0 rgba(180, 83, 9, 0.55);
+  }
+
+  to {
+    box-shadow: 0 0 0 16px rgba(180, 83, 9, 0);
+  }
+}
+
+@keyframes uc-campana {
+  15% {
+    transform: rotate(14deg);
+  }
+
+  30% {
+    transform: rotate(-12deg);
+  }
+
+  45% {
+    transform: rotate(9deg);
+  }
+
+  60% {
+    transform: rotate(-6deg);
+  }
+
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes uc-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ----------------------------------------------------------------- Entradas
+ * `backwards` y no `both`: al terminar, el elemento vuelve a sus estilos (y a su hover). */
+.cards > li,
+.index-list > li,
+.dashboard > *,
+.notification-list > li,
+.hero-text > * {
+  animation: uc-subir var(--uc-mov-lento) var(--uc-curva) backwards;
+
+  &:nth-child(2) {
+    animation-delay: 60ms;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 120ms;
+  }
+
+  &:nth-child(4) {
+    animation-delay: 180ms;
+  }
+
+  &:nth-child(5) {
+    animation-delay: 240ms;
+  }
+
+  &:nth-child(n + 6) {
+    animation-delay: 300ms;
+  }
+}
+
+.notice,
+.empty {
+  animation: uc-subir var(--uc-mov-medio) var(--uc-curva) backwards;
+}
+
+.notice.ok::before {
+  animation: uc-aparecer var(--uc-mov-lento) var(--uc-curva-rebote) backwards;
+}
+
+/* ----------------------------------------------------------------- Avisos nuevos
+ * La campana se sacude una vez y lanza tres ondas; el contador aparece con rebote.
+ * Si el número cambia, vuelve a empezar. */
+.bell {
+  .ping {
+    position: absolute;
+    inset: 7px;
+    border: 2px solid var(--uc-dorado-firme);
+    border-radius: 50%;
+    opacity: 0;
+    animation: uc-onda 1.5s ease-out 3;
+    pointer-events: none;
+  }
+
+  .notification-badge {
+    animation: uc-aparecer var(--uc-mov-lento) var(--uc-curva-rebote) backwards;
+  }
+
+  &.has-unread .icon {
+    animation: uc-campana 0.9s ease-in-out 0.2s 1;
+  }
+}
+
+/* ----------------------------------------------------------------- Siguiente paso recomendado
+ * Un anillo dorado fijo marca el control; el halo lo anuncia tres veces al aparecer. */
+.beacon {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: calc(var(--uc-radio) + 5px);
+    pointer-events: none;
+  }
+
+  &::before {
+    border: 2px solid var(--uc-dorado-firme);
+  }
+
+  &::after {
+    animation: uc-halo 1.5s var(--uc-curva) 3;
+  }
+}
+
+/* ----------------------------------------------------------------- Ruta de publicación y marcadores */
+.route .current .route-dot::after,
+.hero-marks span::after,
+.attention::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--uc-dorado-firme);
+  border-radius: 50%;
+  opacity: 0;
+  animation: uc-onda 1.5s ease-out 3;
+  pointer-events: none;
+}
+
+.hero-marks span:nth-child(2)::after {
+  animation-delay: 0.5s;
+}
+
+.hero-marks span:nth-child(3)::after {
+  animation-delay: 1s;
+}
+
+.attention {
+  position: relative;
+
+  &::after {
+    inset: 50% auto auto 0;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+  }
+}
+
+/* ----------------------------------------------------------------- Cargando */
+.loading::before {
+  animation: uc-girar 0.8s linear infinite;
+}
+
+/* ----------------------------------------------------------------- Cambio de página
+ * Un fundido corto: la cabecera no se mueve y el contenido se releva, así se conserva el sitio. */
+::view-transition-old(root) {
+  animation-duration: 120ms;
+}
+
+::view-transition-new(root) {
+  animation-duration: 220ms;
+}
+
+/* ----------------------------------------------------------------- Reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
+  /* Sin giro, el aviso de carga sigue diciendo que el sistema trabaja. */
+  .loading::before {
+    border-color: var(--uc-esmeralda);
+    border-style: dotted;
+  }
+}

@@ -20,6 +20,7 @@ const DETAIL_ROUTE: Record<SearchableType, string> = {
   imports: [FormsModule, RouterLink, LabelPipe, Pager, TermTags],
   template: `
     <h1>Buscar en el portal</h1>
+    <p class="lead">Busca a la vez en iniciativas, recursos y cursos publicados.</p>
 
     <form class="filters" role="search" (ngSubmit)="apply()">
       <div class="field">
@@ -43,7 +44,7 @@ const DETAIL_ROUTE: Record<SearchableType, string> = {
     } @else if (result(); as page) {
       <p class="meta" aria-live="polite">{{ page.total }} {{ page.total === 1 ? 'resultado' : 'resultados' }}</p>
       @if (page.total === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>No encontramos contenidos publicados con esos criterios.</strong></p>
           <p>Prueba con otras palabras, sin tildes o con menos términos.</p>
         </div>
@@ -61,7 +62,7 @@ const DETAIL_ROUTE: Record<SearchableType, string> = {
         <app-pager [page]="page" />
       }
     } @else {
-      <p>Buscando…</p>
+      <p class="loading" role="status">Buscando…</p>
     }
   `,
 })

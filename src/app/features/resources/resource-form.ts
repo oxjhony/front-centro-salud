@@ -19,16 +19,18 @@ const TERM_TYPES: TaxonomyType[] = ['RESOURCE_TYPE', 'THEME', 'TERRITORY', 'POPU
   selector: 'app-resource-form',
   imports: [FormsModule, RouterLink, DatePipe, LabelPipe, FileSizePipe, EditorialPanel, TermPicker],
   template: `
-    <p><a routerLink="/mis-recursos">← Mis recursos</a></p>
     <h1>{{ id() ? 'Editar recurso' : 'Nuevo recurso' }}</h1>
 
     @if (!editable()) {
       <p class="notice">Este recurso está en «{{ state() | label }}» y no se puede editar.</p>
     }
 
+    <div class="editor-layout">
+      <div>
     @if (catalogs(); as options) {
-      <form (ngSubmit)="save()">
-        <fieldset [disabled]="!editable() || busy()" style="border: 0; padding: 0; max-width: none">
+      <form class="panel form-panel" (ngSubmit)="save()">
+        <fieldset [disabled]="!editable() || busy()" class="plain">
+          <p class="hint">Los campos marcados con <span aria-hidden="true">*</span><span class="visually-hidden">asterisco</span> son obligatorios.</p>
           <div class="field">
             <label for="title">Título</label>
             <input id="title" name="title" type="text" required minlength="3" maxlength="255" [(ngModel)]="model.title" />
@@ -66,6 +68,7 @@ const TERM_TYPES: TaxonomyType[] = ['RESOURCE_TYPE', 'THEME', 'TERRITORY', 'POPU
 
           <div class="actions">
             <button type="submit">{{ busy() ? 'Guardando…' : id() ? 'Guardar cambios' : 'Crear y continuar con el archivo' }}</button>
+            <a class="button secondary" routerLink="/mis-recursos">Volver a mis recursos</a>
           </div>
         </fieldset>
       </form>
@@ -117,7 +120,7 @@ const TERM_TYPES: TaxonomyType[] = ['RESOURCE_TYPE', 'THEME', 'TERRITORY', 'POPU
         </section>
       }
     } @else if (!error()) {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
 
     @if (notice()) {
@@ -127,9 +130,14 @@ const TERM_TYPES: TaxonomyType[] = ['RESOURCE_TYPE', 'THEME', 'TERRITORY', 'POPU
       <p class="notice error" role="alert">{{ error() }}</p>
     }
 
-    @if (id(); as resourceId) {
-      <app-editorial-panel entityType="resources" [entityId]="resourceId" [state]="state()" (changed)="state.set($event)" />
-    }
+      </div>
+
+      @if (id(); as resourceId) {
+        <aside>
+          <app-editorial-panel entityType="resources" [entityId]="resourceId" [state]="state()" (changed)="state.set($event)" />
+        </aside>
+      }
+    </div>
   `,
 })
 export class ResourceForm implements OnInit {

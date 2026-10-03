@@ -8,7 +8,10 @@ import { AuthService } from '../../core/auth';
   selector: 'app-login',
   imports: [FormsModule],
   template: `
-    <h1>Ingresar</h1>
+    <div class="auth">
+      <div class="auth-form">
+        <h1>Ingresar</h1>
+        <p class="lead">Con tu cuenta gestionas tus contenidos, tu perfil y tus avisos.</p>
 
     <form (ngSubmit)="submit()">
       <div class="field">
@@ -34,6 +37,17 @@ import { AuthService } from '../../core/auth';
 
       <button type="submit" [disabled]="busy()">{{ busy() ? 'Ingresando…' : 'Ingresar' }}</button>
     </form>
+
+        <p class="hint">
+          Para explorar el portal no necesitas cuenta. Solo algunos recursos piden ingresar para descargarlos.
+        </p>
+      </div>
+
+      <div class="auth-aside on-dark">
+        <p class="auth-quote">El conocimiento en salud pública de Caldas, reunido y revisado.</p>
+        <p>Centro Virtual de Salud Pública · Universidad de Caldas</p>
+      </div>
+    </div>
   `,
 })
 export class Login {

@@ -15,13 +15,13 @@ import { NotificationRecord } from '../../core/models';
       <p class="notice error" role="alert">{{ error() }}</p>
     } @else if (items(); as list) {
       @if (unread() > 0) {
-        <p>
-          {{ unread() }} sin leer ·
+        <div class="actions">
+          <span><strong>{{ unread() }}</strong> sin leer</span>
           <button type="button" class="secondary" (click)="readAll()">Marcar todas como leídas</button>
-        </p>
+        </div>
       }
       @if (list.length === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>No tienes notificaciones.</strong></p>
           <p>Aquí verás cuándo tus contenidos avanzan en el flujo editorial.</p>
         </div>
@@ -46,7 +46,7 @@ import { NotificationRecord } from '../../core/models';
         </ul>
       }
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

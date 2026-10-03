@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api } from '../../core/api';
 import { AuthService } from '../../core/auth';
-import { ADMIN_PERMISSIONS, NotificationRecord, Permission } from '../../core/models';
+import { NotificationRecord, Permission } from '../../core/models';
 import { label, LabelPipe } from '../../shared/labels';
 
 interface MyContent {
@@ -13,8 +13,8 @@ interface MyContent {
 }
 
 /**
- * Area personal, como el tablero de Moodle: lo ultimo que le paso a la persona y acceso directo
- * a lo que gestiona segun sus permisos.
+ * Area personal, como el tablero de Moodle: lo ultimo que le paso a la persona y lo que tiene en
+ * curso. Los accesos a cada seccion son las pestanas de la barra personal.
  */
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +22,7 @@ interface MyContent {
   template: `
     <h1>Mi área</h1>
     @if (auth.user(); as user) {
-      <p>
+      <p class="lead">
         Hola, {{ user.displayName }}.
         <span class="meta">Roles: {{ roleNames(user.roles) }}</span>
       </p>
@@ -32,9 +32,10 @@ interface MyContent {
       <section class="card" aria-labelledby="dash-notifications">
         <h2 id="dash-notifications">Notificaciones recientes</h2>
         @for (item of notifications(); track item.id) {
-          <p>
+          <p class="dashboard-item">
             @if (!item.readAt) {
               <strong>{{ item.title }}</strong>
+              <span class="attention">Sin leer</span>
             } @else {
               {{ item.title }}
             }
@@ -50,9 +51,12 @@ interface MyContent {
         <section class="card" [attr.aria-label]="group.title">
           <h2>{{ group.title }}</h2>
           @for (item of group.items.slice(0, 5); track item.id) {
-            <p>
+            <p class="dashboard-item">
               <a [routerLink]="[group.route, item.id]">{{ item.title }}</a><br />
               <span class="state" [attr.data-state]="item.state">{{ item.state | label }}</span>
+              @if (item.state === 'RETURNED') {
+                <span class="attention">Necesita cambios</span>
+              }
             </p>
           } @empty {
             <p class="meta">Todavía no tienes contenidos aquí.</p>
@@ -60,28 +64,12 @@ interface MyContent {
           <p><a [routerLink]="group.route">Ir a {{ group.title.toLowerCase() }}</a></p>
         </section>
       }
-
-      <section class="card" aria-labelledby="dash-shortcuts">
-        <h2 id="dash-shortcuts">Accesos</h2>
-        <ul class="related-list">
-          <li><a routerLink="/mi-perfil">Mi perfil</a></li>
-          @if (auth.can(Permission.ContentReview)) {
-            <li><a routerLink="/revision">Bandeja de revisión</a></li>
-          }
-          @if (auth.canAny(adminPermissions)) {
-            <li><a routerLink="/administracion">Administración</a></li>
-          }
-          <li><a routerLink="/buscar">Buscar en el portal</a></li>
-        </ul>
-      </section>
     </div>
   `,
 })
 export class Dashboard implements OnInit {
   private readonly api = inject(Api);
   protected readonly auth = inject(AuthService);
-  protected readonly Permission = Permission;
-  protected readonly adminPermissions = ADMIN_PERMISSIONS;
 
   protected readonly notifications = signal<NotificationRecord[]>([]);
   protected readonly contents = signal<MyContent[]>([]);

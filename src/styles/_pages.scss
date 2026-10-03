@@ -1,0 +1,501 @@
+/*
+ * Composiciones propias de una pantalla: portada, ingreso y página no encontrada.
+ * El relieve (curvas de nivel) es el motivo de la casa: alude a los territorios de Caldas.
+ */
+
+/* Capa de relieve para cualquier bloque con `position: relative` e `isolation: isolate`. */
+@mixin relieve($color, $opacidad) {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  background-color: $color;
+  opacity: $opacidad;
+  -webkit-mask: url('/relieve.svg') center / cover no-repeat;
+  mask: url('/relieve.svg') center / cover no-repeat;
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------------- Portada: bienvenida */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(28px, 5.5vw, 72px);
+  border: 1px solid var(--uc-borde);
+  border-radius: var(--uc-radio-xl);
+  background-color: var(--uc-superficie);
+
+  &::before {
+    @include relieve(var(--uc-esmeralda), 0.3);
+    inset: 0 0 0 34%;
+  }
+
+  /* El relieve se desvanece hacia el texto para que nunca compita con la lectura. */
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 0 34%;
+    background: linear-gradient(90deg, var(--uc-superficie) 0%, rgba(255, 255, 255, 0.72) 34%, rgba(255, 255, 255, 0) 78%);
+    pointer-events: none;
+  }
+
+  .hero-text {
+    max-width: 660px;
+  }
+
+  h1 {
+    font-size: clamp(2.3rem, 1.3rem + 4.4vw, 4.1rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.45em;
+
+    em {
+      color: var(--uc-esmeralda);
+      font-weight: 500;
+    }
+  }
+
+  .lead {
+    font-size: clamp(1.05rem, 1rem + 0.4vw, 1.25rem);
+  }
+}
+
+/* Marcadores dorados sobre el relieve: los tres caminos del portal. Solo decoración. */
+.hero-marks span {
+  position: absolute;
+  z-index: -1;
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--uc-superficie);
+  border-radius: 50%;
+  background-color: var(--uc-dorado-firme);
+  box-shadow: 0 0 0 1.5px var(--uc-dorado-firme);
+
+  &:nth-child(1) {
+    top: 34%;
+    right: 22%;
+  }
+
+  &:nth-child(2) {
+    top: 76%;
+    right: 9%;
+  }
+
+  &:nth-child(3) {
+    top: 16%;
+    right: 44%;
+  }
+}
+
+.search-hero {
+  max-width: 620px;
+  margin-top: 28px;
+
+  label {
+    font-size: 1rem;
+  }
+}
+
+.search-hero-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 16px;
+  border: 1.5px solid var(--uc-borde-firme);
+  border-radius: 14px;
+  background-color: var(--uc-superficie);
+  box-shadow: var(--uc-sombra);
+  transition: border-color var(--uc-mov-rapido) ease;
+
+  > app-icon {
+    color: var(--uc-texto-suave);
+    font-size: 1.1rem;
+  }
+
+  input[type='search'] {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  /* El foco del campo se dibuja en toda la caja. */
+  &:has(input:focus-visible) {
+    border-color: var(--uc-esmeralda);
+    outline: 3px solid var(--uc-foco);
+    outline-offset: 3px;
+  }
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  color: var(--uc-texto-suave);
+  font-size: 0.93rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 4px 14px;
+    border: 1px solid var(--uc-borde-firme);
+    border-radius: var(--uc-radio-pill);
+    background-color: var(--uc-superficie);
+    color: var(--uc-verde-principal);
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color var(--uc-mov-rapido) ease,
+      border-color var(--uc-mov-rapido) ease;
+
+    &:hover {
+      border-color: var(--uc-esmeralda);
+      background-color: var(--uc-menta-suave);
+    }
+  }
+}
+
+/* ----------------------------------------------------------------- Portada: secciones */
+.section-head {
+  margin-bottom: 18px;
+
+  h2 {
+    margin: 0;
+  }
+
+  p:not(.eyebrow) {
+    margin: 10px 0 0;
+    color: var(--uc-texto-suave);
+    max-width: 44ch;
+  }
+}
+
+/* Título a un lado y contenido al otro: composición de revista, no de plantilla. */
+.split {
+  display: grid;
+  gap: 20px 56px;
+}
+
+@media (min-width: 960px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr);
+    align-items: start;
+  }
+}
+
+/* Índice numerado: tres caminos, en orden, con todo el renglón como enlace. */
+.index-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid var(--uc-verde-principal);
+}
+
+.index-row {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 20px;
+  padding: 24px 16px 24px 8px;
+  border-bottom: 1px solid var(--uc-borde);
+  color: var(--uc-texto);
+  text-decoration: none;
+  transition:
+    background-color var(--uc-mov-medio) ease,
+    padding var(--uc-mov-medio) var(--uc-curva);
+
+  .index-num {
+    align-self: start;
+    color: var(--uc-dorado-firme);
+    font-family: var(--uc-fuente-titulos);
+    font-size: 2.1rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.05;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 4px;
+    font-family: var(--uc-fuente-titulos);
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    transition: color var(--uc-mov-rapido) ease;
+
+    .icon {
+      color: var(--uc-esmeralda);
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .index-keys {
+    margin-top: 6px;
+    color: var(--uc-texto-suave);
+    font-size: 0.9rem;
+  }
+
+  .index-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--uc-esmeralda);
+    font-weight: 700;
+    white-space: nowrap;
+
+    .icon {
+      transition: transform var(--uc-mov-medio) var(--uc-curva);
+    }
+  }
+
+  &:hover {
+    padding-left: 18px;
+    background-color: var(--uc-superficie);
+    color: var(--uc-texto);
+
+    h3 {
+      color: var(--uc-esmeralda);
+    }
+
+    .index-go .icon {
+      transform: translateX(6px);
+    }
+  }
+}
+
+.aula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1.5px dashed var(--uc-borde-firme);
+  border-radius: var(--uc-radio-lg);
+  color: var(--uc-texto);
+  text-decoration: none;
+  transition:
+    background-color var(--uc-mov-rapido) ease,
+    border-color var(--uc-mov-rapido) ease;
+
+  > app-icon {
+    color: var(--uc-esmeralda);
+    font-size: 1.3rem;
+  }
+
+  strong {
+    color: var(--uc-verde-principal);
+  }
+
+  span:last-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    color: var(--uc-esmeralda);
+    font-weight: 700;
+  }
+
+  &:hover {
+    border-color: var(--uc-esmeralda);
+    background-color: var(--uc-superficie);
+    color: var(--uc-texto);
+  }
+}
+
+/* Compromisos: una franja oscura que da ritmo a la página. */
+.pillars {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 44px;
+  padding: clamp(28px, 4.5vw, 56px);
+  border-radius: var(--uc-radio-xl);
+  background-color: var(--uc-verde-principal);
+  color: rgba(255, 255, 255, 0.88);
+
+  &::before {
+    @include relieve(#ffffff, 0.09);
+    inset: 0;
+  }
+
+  h2 {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--uc-dorado-vivo);
+    font-family: var(--uc-fuente-texto);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 12px 0 6px;
+    color: #ffffff;
+    font-family: var(--uc-fuente-titulos);
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  app-icon {
+    color: var(--uc-dorado-vivo);
+    font-size: 1.5rem;
+  }
+}
+
+/* ----------------------------------------------------------------- Ingreso */
+.auth {
+  display: grid;
+  max-width: 980px;
+  margin: 12px auto 0;
+  overflow: hidden;
+  border: 1px solid var(--uc-borde);
+  border-radius: var(--uc-radio-xl);
+  background-color: var(--uc-superficie);
+
+  .auth-form {
+    padding: clamp(24px, 4.5vw, 56px);
+
+    button[type='submit'] {
+      width: 100%;
+      margin-top: 4px;
+    }
+  }
+
+  .auth-aside {
+    position: relative;
+    isolation: isolate;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: clamp(24px, 4.5vw, 56px);
+    background-color: var(--uc-verde-principal);
+    color: rgba(255, 255, 255, 0.88);
+
+    &::before {
+      @include relieve(#ffffff, 0.14);
+      inset: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .auth-quote {
+      color: #ffffff;
+      font-family: var(--uc-fuente-titulos);
+      font-size: 1.7rem;
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+    }
+  }
+}
+
+@media (min-width: 860px) {
+  .auth {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+
+    .auth-aside {
+      display: flex;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------- Página no encontrada */
+.not-found {
+  display: grid;
+  justify-items: center;
+  max-width: 600px;
+  margin: 32px auto 0;
+  text-align: center;
+
+  > app-icon {
+    margin-bottom: 12px;
+    color: var(--uc-dorado-firme);
+    font-size: 3.2rem;
+
+    .icon {
+      stroke-width: 1.2;
+    }
+  }
+
+  .actions {
+    justify-content: center;
+  }
+}
+
+/* ----------------------------------------------------------------- Pantallas pequeñas */
+@media (max-width: 759.98px) {
+  .hero {
+    &::before,
+    &::after {
+      inset: 0;
+    }
+
+    &::before {
+      opacity: 0.13;
+    }
+
+    &::after {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.55) 100%);
+    }
+  }
+
+  .hero-marks {
+    display: none;
+  }
+
+  .search-hero-box button {
+    padding-inline: 16px;
+  }
+
+  .index-row {
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    padding: 20px 8px 20px 4px;
+
+    .index-num {
+      font-size: 1.7rem;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+    }
+
+    .index-go {
+      grid-column: 2;
+      margin-top: 4px;
+    }
+  }
+
+  .aula span:last-child {
+    margin-left: 0;
+  }
+
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+}

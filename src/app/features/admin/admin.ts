@@ -47,7 +47,7 @@ const TAXONOMY_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'RES
                 <th scope="col">Usuario</th>
                 <th scope="col">Roles</th>
                 <th scope="col">Estado</th>
-                <th scope="col"><span class="meta">Acción</span></th>
+                <th scope="col">Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -59,10 +59,10 @@ const TAXONOMY_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'RES
                     <span class="meta">Último ingreso: {{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : 'nunca' }}</span>
                   </td>
                   <td>
-                    <fieldset [disabled]="isSelf(user)" style="border: 0; padding: 0; margin: 0">
+                    <fieldset class="plain" [disabled]="isSelf(user)">
                       <legend class="meta">Roles de {{ user.displayName }}</legend>
                       @for (role of assignableRoles(); track role.name) {
-                        <label style="font-weight: 400" [title]="role.description">
+                        <label [title]="role.description">
                           <input type="checkbox" [checked]="user.roles.includes(role.name)" (change)="toggleRole(user, role.name)" />
                           {{ role.name | label }}
                         </label>
@@ -134,7 +134,7 @@ const TAXONOMY_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'RES
                   <th scope="col">Término</th>
                   <th scope="col">Uso</th>
                   <th scope="col">Estado</th>
-                  <th scope="col"><span class="meta">Acciones</span></th>
+                  <th scope="col">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,7 +147,7 @@ const TAXONOMY_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'RES
                       <button type="button" class="secondary" (click)="renameTerm(term)">Renombrar</button>
                       <button type="button" class="secondary" (click)="toggleTerm(term)">{{ term.active ? 'Desactivar' : 'Activar' }}</button>
                       @if (term.usage === 0 && term.children === 0) {
-                        <button type="button" class="secondary" (click)="deleteTerm(term)">Borrar</button>
+                        <button type="button" class="secondary danger" (click)="deleteTerm(term)">Borrar</button>
                       }
                     </td>
                   </tr>

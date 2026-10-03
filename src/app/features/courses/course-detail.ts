@@ -11,13 +11,11 @@ import { CourseAccessView } from './course-access';
   selector: 'app-course-detail',
   imports: [RouterLink, LabelPipe, CourseAccessView],
   template: `
-    <p><a routerLink="/cursos">← Todos los cursos</a></p>
-
     @if (course(); as item) {
       <article>
         <h1>{{ item.title }}</h1>
         <p class="meta">{{ item.type | label }} · {{ item.modality | label }}</p>
-        <p>{{ item.summary }}</p>
+        <p class="lead">{{ item.summary }}</p>
 
         <dl class="details">
           @if (item.duration) {
@@ -75,7 +73,7 @@ import { CourseAccessView } from './course-access';
       <h1>Curso no disponible</h1>
       <p>Este curso no existe o todavía no está publicado.</p>
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

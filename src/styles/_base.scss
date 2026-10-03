@@ -1,0 +1,257 @@
+/* ----------------------------------------------------------------- Tipografías locales
+ * Se sirven desde public/fonts: el portal no depende de servicios externos para verse bien. */
+@font-face {
+  font-family: 'Fraunces Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/fraunces-latin-opsz-normal.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Fraunces Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/fraunces-latin-wght-italic.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Next Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Next Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('/fonts/atkinson-hyperlegible-next-latin-wght-italic.woff2') format('woff2-variations');
+}
+
+/* ----------------------------------------------------------------- Reset y base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* 100 % respeta el tamaño de letra que la persona eligió en su navegador. */
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  /* Lo que recibe el foco nunca queda tapado por la cabecera fija ni por la barra inferior (WCAG 2.4.11). */
+  scroll-padding-top: calc(var(--uc-alto-cabecera) + 20px);
+  scroll-padding-bottom: calc(var(--uc-alto-barra) + 20px);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  color: var(--uc-texto);
+  background-color: var(--uc-fondo);
+  font-family: var(--uc-fuente-texto);
+  font-size: 1rem;
+  line-height: 1.6;
+  padding-bottom: var(--uc-alto-barra);
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+/* ----------------------------------------------------------------- Jerarquía tipográfica */
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 0.5em;
+  color: var(--uc-verde-principal);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  font-family: var(--uc-fuente-titulos);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 1.35rem + 2.3vw, 2.75rem);
+  line-height: 1.08;
+  margin-bottom: 0.4em;
+}
+
+h2 {
+  font-size: clamp(1.35rem, 1.2rem + 0.6vw, 1.6rem);
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* Un título que sigue a otro contenido abre una sección nueva: necesita aire encima. */
+:where(p, ul, ol, dl, div, form, table, section, button) + h2 {
+  margin-top: 2.25rem;
+}
+
+:where(p, ul, ol, dl, div, form, table, button) + h3 {
+  margin-top: 1.75rem;
+}
+
+/* Secciones de primer nivel de una página (hijas directas del componente de la ruta). */
+.page > * > section + section {
+  margin-top: 3.5rem;
+}
+
+p {
+  margin: 0 0 1rem;
+  text-wrap: pretty;
+}
+
+.lead {
+  font-size: 1.125rem;
+  color: var(--uc-texto-suave);
+  max-width: 62ch;
+}
+
+.eyebrow {
+  margin: 0 0 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--uc-esmeralda);
+}
+
+.meta {
+  color: var(--uc-texto-suave);
+  font-size: 0.9rem;
+}
+
+code {
+  font-size: 0.9em;
+  padding: 0.1em 0.4em;
+  border-radius: var(--uc-radio-sm);
+  background-color: var(--uc-menta-suave);
+  color: var(--uc-verde-principal);
+}
+
+blockquote {
+  margin: 8px 0 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--uc-dorado-firme);
+  background-color: var(--uc-dorado-suave);
+  color: var(--uc-texto);
+  border-radius: 0 var(--uc-radio-sm) var(--uc-radio-sm) 0;
+}
+
+/* ----------------------------------------------------------------- Enlaces */
+a {
+  color: var(--uc-esmeralda);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition:
+    color var(--uc-mov-rapido) ease,
+    text-decoration-color var(--uc-mov-rapido) ease;
+
+  &:hover {
+    color: var(--uc-verde-principal);
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ----------------------------------------------------------------- Foco visible (WCAG 2.4.7, 2.4.11 y 1.4.11)
+ * Un solo anillo para todo: verde bosque sobre fondos claros y dorado sobre fondos oscuros. */
+:focus-visible {
+  outline: 3px solid var(--uc-foco);
+  outline-offset: 3px;
+}
+
+/* El contenido principal recibe el foco al cambiar de página; no necesita anillo propio. */
+main:focus {
+  outline: none;
+}
+
+/* ----------------------------------------------------------------- Utilidades */
+.wrap {
+  width: min(100% - 2 * var(--uc-margen), var(--uc-ancho-maximo));
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Iconos de trazo: heredan el color y el tamaño del texto que acompañan. */
+app-icon {
+  display: inline-flex;
+  flex: none;
+}
+
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Enlace para saltar al contenido principal */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 3000;
+  padding: 12px 18px;
+  border-radius: var(--uc-radio);
+  background-color: var(--uc-verde-principal);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--uc-sombra-lg);
+  transform: translateY(-220%);
+  transition: transform var(--uc-mov-medio) var(--uc-curva);
+
+  &:focus {
+    transform: translateY(0);
+    color: #ffffff;
+    outline: 3px solid var(--uc-dorado-vivo);
+    outline-offset: 2px;
+  }
+}

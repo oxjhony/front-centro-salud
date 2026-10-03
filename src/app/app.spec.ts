@@ -51,7 +51,10 @@ describe('App: navegación según la sesión', () => {
     };
   };
 
-  const PUBLIC = ['Iniciativas', 'Recursos', 'Cursos'];
+  // Navegacion principal: la portada y los tres caminos del portal.
+  const PUBLIC = ['Inicio', 'Iniciativas', 'Recursos', 'Cursos'];
+  // Pestanas de la barra personal que tiene cualquier persona con sesion.
+  const PERSONAL = ['Mi área', 'Mi perfil'];
 
   it('el visitante ve el portal público y el enlace para ingresar', async () => {
     const { element, links } = await render(null);
@@ -62,29 +65,29 @@ describe('App: navegación según la sesión', () => {
 
   it('el autor ve además «Mis iniciativas» y «Mis recursos»', async () => {
     const { links } = await render(user(['initiative:manage', 'resource:manage', 'content:submit']));
-    expect(links).toEqual([...PUBLIC, 'Mis iniciativas', 'Mis recursos']);
+    expect(links).toEqual([...PUBLIC, ...PERSONAL, 'Mis iniciativas', 'Mis recursos']);
   });
 
   it('el gestor académico ve «Mis recursos» y «Mis cursos», y no «Mis iniciativas»', async () => {
     const { links } = await render(user(['course:manage', 'resource:manage', 'content:submit']));
-    expect(links).toEqual([...PUBLIC, 'Mis recursos', 'Mis cursos']);
+    expect(links).toEqual([...PUBLIC, ...PERSONAL, 'Mis recursos', 'Mis cursos']);
   });
 
   it('el revisor ve la bandeja de revisión', async () => {
     const { links } = await render(user(['content:review', 'content:approve', 'content:publish']));
-    expect(links).toEqual([...PUBLIC, 'Revisión']);
+    expect(links).toEqual([...PUBLIC, ...PERSONAL, 'Revisión']);
   });
 
   it('el administrador técnico ve administración, pero no la bandeja de revisión', async () => {
     const { links } = await render(user(['audit:view', 'integration:operate']));
-    expect(links).toEqual([...PUBLIC, 'Administración']);
+    expect(links).toEqual([...PUBLIC, ...PERSONAL, 'Administración']);
   });
 
   it('con sesión muestra el nombre, el acceso a su área, las notificaciones sin leer y el botón para salir', async () => {
     const { element } = await render(user([]), 3);
 
-    expect(element.querySelector('.session a.user-pill')?.textContent).toContain('Persona de Prueba');
-    expect(element.querySelector('.session a.user-pill')?.getAttribute('href')).toBe('/mi-area');
+    expect(element.querySelector('.session .user-pill')?.textContent).toContain('Persona de Prueba');
+    expect(element.querySelector('.session nav a[href="/mi-area"]')?.textContent).toContain('Mi área');
     expect(element.querySelector('.notification-badge')?.textContent).toContain('3');
     expect(element.querySelector('.session button')?.textContent).toContain('Salir');
   });
@@ -94,11 +97,10 @@ describe('App: navegación según la sesión', () => {
     expect(element.querySelector('.notification-badge')).toBeNull();
   });
 
-  it('tiene un enlace para saltar al contenido, un buscador con etiqueta y un único <main>', async () => {
+  it('tiene un enlace para saltar al contenido y un único <main>', async () => {
     const { element } = await render(null);
 
     expect(element.querySelector('a.skip-link')?.getAttribute('href')).toBe('#contenido');
-    expect(element.querySelector('label[for="busqueda-global"]')).not.toBeNull();
     expect(element.querySelectorAll('main')).toHaveLength(1);
     expect(element.querySelector('main')?.id).toBe('contenido');
   });

@@ -1,171 +1,168 @@
-<a class="skip-link uc-saltar" href="#contenido">Saltar al contenido</a>
+<a class="skip-link" href="#contenido" (click)="skipToContent($event)">Saltar al contenido</a>
 
-<!-- Barra utilitaria superior institucional (identidad UCaldas) -->
-<div class="top-utility-bar">
-  <div class="uc-contenedor utility-inner">
-    <span class="utility-badge"><i class="fa-solid fa-landmark" aria-hidden="true"></i> Universidad de Caldas · Facultad de Ciencias para la Salud</span>
-    <span class="utility-campus"><i class="fa-solid fa-globe" aria-hidden="true"></i> Manizales, Caldas · Colombia</span>
+<!-- Franja institucional -->
+<div class="topbar on-dark">
+  <div class="wrap topbar-inner">
+    <span><app-icon name="landmark" />Universidad de Caldas · Facultad de Ciencias para la Salud</span>
+    <a href="https://virtual.ucaldas.edu.co" target="_blank" rel="noopener">
+      UCaldas Virtual<span class="visually-hidden"> (se abre en otra pestaña)</span><app-icon name="arrow-up-right" />
+    </a>
   </div>
 </div>
 
-<header class="site-header uc-cabecera">
-  <div class="header-inner uc-contenedor">
-    <a class="brand uc-marca" routerLink="/" (click)="closeMenu()">
-      <img class="uc-logo" src="/logo-ucaldas.png" alt="Universidad de Caldas" onerror="this.style.display='none'">
-      <div class="brand-titles">
-        <span class="brand-title">Centro Virtual de Salud Pública</span>
-        <span class="brand-sub">Universidad de Caldas</span>
-      </div>
+<!-- Primer nivel: el portal público. En pantallas pequeñas la navegación es la barra inferior. -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" routerLink="/">
+      <img class="brand-logo" src="/logo-ucaldas.png" alt="Universidad de Caldas" onerror="this.style.display='none'">
+      <span class="brand-name">Centro Virtual de <span>Salud Pública</span></span>
     </a>
 
-    <button
-      type="button"
-      class="menu-toggle"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="menuOpen"
-      aria-label="Alternar menú de navegación">
-      <i class="fa-solid" [class.fa-bars]="!menuOpen" [class.fa-xmark]="menuOpen" aria-hidden="true"></i>
-    </button>
-
-    <nav class="uc-nav" [class.open]="menuOpen" aria-label="Principal">
+    <nav class="primary-nav" aria-label="Principal">
       <ul>
         <li>
-          <a routerLink="/iniciativas" routerLinkActive="active" (click)="closeMenu()">
-            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>Iniciativas
+          <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">
+            <app-icon name="house" />Inicio
           </a>
         </li>
         <li>
-          <a routerLink="/recursos" routerLinkActive="active" (click)="closeMenu()">
-            <i class="fa-solid fa-book-open" aria-hidden="true"></i>Recursos
+          <a routerLink="/iniciativas" routerLinkActive="active" ariaCurrentWhenActive="page">
+            <app-icon name="lightbulb" />Iniciativas
           </a>
         </li>
         <li>
-          <a routerLink="/cursos" routerLinkActive="active" (click)="closeMenu()">
-            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>Cursos
+          <a routerLink="/recursos" routerLinkActive="active" ariaCurrentWhenActive="page">
+            <app-icon name="book-open" />Recursos
           </a>
         </li>
-        @if (auth.can(Permission.InitiativeManage)) {
-          <li>
-            <a routerLink="/mis-iniciativas" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fa-solid fa-folder-open" aria-hidden="true"></i>Mis iniciativas
-            </a>
-          </li>
-        }
-        @if (auth.can(Permission.ResourceManage)) {
-          <li>
-            <a routerLink="/mis-recursos" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>Mis recursos
-            </a>
-          </li>
-        }
-        @if (auth.can(Permission.CourseManage)) {
-          <li>
-            <a routerLink="/mis-cursos" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fa-solid fa-book-bookmark" aria-hidden="true"></i>Mis cursos
-            </a>
-          </li>
-        }
-        @if (auth.can(Permission.ContentReview)) {
-          <li>
-            <a routerLink="/revision" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>Revisión
-            </a>
-          </li>
-        }
-        @if (auth.canAny(adminPermissions)) {
-          <li>
-            <a routerLink="/administracion" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fa-solid fa-sliders" aria-hidden="true"></i>Administración
-            </a>
-          </li>
-        }
+        <li>
+          <a routerLink="/cursos" routerLinkActive="active" ariaCurrentWhenActive="page">
+            <app-icon name="graduation-cap" />Cursos
+          </a>
+        </li>
       </ul>
     </nav>
 
-    <div class="session uc-herramientas">
-      <form role="search" class="header-search" (ngSubmit)="search()">
-        <label for="busqueda-global" class="visually-hidden">Buscar en el portal</label>
-        <input id="busqueda-global" name="q" type="search" placeholder="Buscar…" [(ngModel)]="query" />
-      </form>
-      @if (auth.user(); as user) {
-        <a routerLink="/notificaciones" class="btn-secondary" [attr.aria-label]="'Notificaciones: ' + unread() + ' sin leer'" (click)="closeMenu()">
-          <i class="fa-solid fa-bell" aria-hidden="true"></i>
-          @if (unread() > 0) {
-            <span class="notification-badge" aria-hidden="true">{{ unread() }}</span>
-          }
-        </a>
-        <a routerLink="/mi-area" class="user-pill" [title]="user.email" (click)="closeMenu()">
-          <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
-          <span class="user-name">{{ user.displayName }}</span>
-        </a>
-        <button type="button" class="btn-logout" (click)="logout()" title="Cerrar sesión">
-          <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
-          <span>Salir</span>
-        </button>
-      } @else {
-        <a routerLink="/ingresar" class="btn-login" (click)="closeMenu()">
-          <i class="fa-solid fa-lock" aria-hidden="true"></i>
-          <span>Ingresar</span>
-        </a>
-      }
-    </div>
+    @if (!auth.user()) {
+      <div class="session">
+        <a routerLink="/ingresar" class="btn-login"><app-icon name="log-in" /><span>Ingresar</span></a>
+      </div>
+    }
   </div>
 </header>
 
-<main id="contenido" class="uc-contenedor uc-pagina-principal" tabindex="-1">
+<!-- Segundo nivel: la barra personal de quien tiene sesión. Accesos en pestañas; avisos, usuario y salir juntos. -->
+@if (auth.user(); as user) {
+  <div class="session account-bar">
+    <div class="wrap account-inner">
+      <nav #tabs class="tabs" aria-label="Mi espacio">
+        <ul>
+          <li><a routerLink="/mi-area" routerLinkActive="active" ariaCurrentWhenActive="page">Mi área</a></li>
+          <li><a routerLink="/mi-perfil" routerLinkActive="active" ariaCurrentWhenActive="page">Mi perfil</a></li>
+        </ul>
+
+        @if (hasWorkspace()) {
+          <ul>
+            @if (auth.can(Permission.InitiativeManage)) {
+              <li><a routerLink="/mis-iniciativas" routerLinkActive="active" ariaCurrentWhenActive="page">Mis iniciativas</a></li>
+            }
+            @if (auth.can(Permission.ResourceManage)) {
+              <li><a routerLink="/mis-recursos" routerLinkActive="active" ariaCurrentWhenActive="page">Mis recursos</a></li>
+            }
+            @if (auth.can(Permission.CourseManage)) {
+              <li><a routerLink="/mis-cursos" routerLinkActive="active" ariaCurrentWhenActive="page">Mis cursos</a></li>
+            }
+            @if (auth.can(Permission.ContentReview)) {
+              <li><a routerLink="/revision" routerLinkActive="active" ariaCurrentWhenActive="page">Revisión</a></li>
+            }
+            @if (auth.canAny(adminPermissions)) {
+              <li><a routerLink="/administracion" routerLinkActive="active" ariaCurrentWhenActive="page">Administración</a></li>
+            }
+          </ul>
+        }
+      </nav>
+
+      <div class="account">
+        <a
+          routerLink="/notificaciones"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          class="bell"
+          title="Notificaciones"
+          [class.has-unread]="unread() > 0"
+          [attr.aria-label]="'Notificaciones: ' + unread() + ' sin leer'"
+        >
+          <app-icon name="bell" />
+          @for (count of unreadMarks(); track count) {
+            <span class="ping" aria-hidden="true"></span>
+            <span class="notification-badge" aria-hidden="true">{{ count }}</span>
+          }
+        </a>
+        <span class="user-pill" [title]="user.email">
+          <span class="avatar" aria-hidden="true">{{ initials(user.displayName) }}</span>
+          <span class="user-name">{{ user.displayName }}</span>
+        </span>
+        <button type="button" class="btn-logout" (click)="logout()"><app-icon name="log-out" /><span>Salir</span></button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-breadcrumbs />
+
+<main #main id="contenido" class="wrap page" tabindex="-1">
   <router-outlet />
 </main>
 
-<footer class="uc-pie">
-  <div class="uc-pie-principal">
-    <div class="uc-contenedor uc-pie-columnas">
-      <div class="uc-pie-columna uc-pie-marca">
-        <div class="pie-logo-wrap">
-          <img class="pie-logo" src="/logo-ucaldas.png" alt="Universidad de Caldas" onerror="this.style.display='none'">
-          <div class="pie-brand-text">
-            <h3>Centro Virtual de Salud Pública</h3>
-            <p class="pie-sub">Facultad de Ciencias para la Salud</p>
-          </div>
-        </div>
-        <p class="pie-desc">
-          Plataforma de gestión del conocimiento y oferta formativa para fortalecer la salud pública y el bienestar en los territorios de Caldas y Colombia.
-        </p>
+<footer class="site-footer on-dark">
+  <div class="wrap footer-main">
+    <div>
+      <div class="footer-brand">
+        <img src="/logo-ucaldas.png" alt="Universidad de Caldas" onerror="this.style.display='none'">
+        <p>Centro Virtual de Salud Pública <span>Facultad de Ciencias para la Salud</span></p>
       </div>
+      <p>
+        Plataforma de gestión del conocimiento y oferta formativa para fortalecer la salud pública y el bienestar en los
+        territorios de Caldas y Colombia.
+      </p>
+    </div>
 
-      <div class="uc-pie-columna">
-        <h4>Plataforma</h4>
-        <ul>
-          <li><a routerLink="/iniciativas">Iniciativas y Proyectos</a></li>
-          <li><a routerLink="/recursos">Repositorio de Recursos</a></li>
-          <li><a routerLink="/cursos">Catálogo de Cursos</a></li>
-          <li><a routerLink="/ingresar">Acceso a Gestión</a></li>
-        </ul>
-      </div>
+    <div>
+      <h2>Plataforma</h2>
+      <ul>
+        <li><a routerLink="/iniciativas">Iniciativas y proyectos</a></li>
+        <li><a routerLink="/recursos">Repositorio de recursos</a></li>
+        <li><a routerLink="/cursos">Catálogo de cursos</a></li>
+        <li><a routerLink="/ingresar">Acceso a gestión</a></li>
+      </ul>
+    </div>
 
-      <div class="uc-pie-columna">
-        <h4>Universidad de Caldas</h4>
-        <ul>
-          <li><a href="https://www.ucaldas.edu.co" target="_blank" rel="noopener">Portal Institucional UCaldas</a></li>
-          <li><a href="https://virtual.ucaldas.edu.co" target="_blank" rel="noopener">Campus UCaldas Virtual (Moodle)</a></li>
-          <li><a href="https://itmsi.libsteps.com/CBUC/" target="_blank" rel="noopener">Sistema de Bibliotecas</a></li>
-        </ul>
-      </div>
+    <div>
+      <h2>Universidad de Caldas</h2>
+      <ul>
+        <li><a href="https://www.ucaldas.edu.co" target="_blank" rel="noopener">Portal institucional</a></li>
+        <li><a href="https://virtual.ucaldas.edu.co" target="_blank" rel="noopener">Campus UCaldas Virtual (Moodle)</a></li>
+        <li><a href="https://itmsi.libsteps.com/CBUC/" target="_blank" rel="noopener">Sistema de bibliotecas</a></li>
+      </ul>
+    </div>
 
-      <div class="uc-pie-columna">
-        <h4>Contacto & Ubicación</h4>
-        <ul class="pie-contacto">
-          <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Calle 65 No 26-10, Manizales, Caldas</li>
-          <li><i class="fa-solid fa-phone" aria-hidden="true"></i> (+57 6) 878 1500</li>
-          <li><i class="fa-solid fa-envelope" aria-hidden="true"></i> saludpublica&#64;ucaldas.edu.co</li>
-        </ul>
-      </div>
+    <div>
+      <h2>Contacto y ubicación</h2>
+      <ul class="footer-contact">
+        <li><app-icon name="map-pin" /><span>Calle 65 No 26-10, Manizales, Caldas</span></li>
+        <li><app-icon name="phone" /><a href="tel:+5768781500">(+57 6) 878 1500</a></li>
+        <li><app-icon name="mail" /><a href="mailto:saludpublica&#64;ucaldas.edu.co">saludpublica&#64;ucaldas.edu.co</a></li>
+      </ul>
     </div>
   </div>
 
-  <div class="uc-pie-derechos">
-    <div class="uc-contenedor derechos-inner">
+  <div class="footer-legal">
+    <div class="wrap">
       <p>© 2026 Universidad de Caldas · Institución de Educación Superior sujeta a inspección y vigilancia por el Ministerio de Educación Nacional</p>
-      <p class="derechos-sub">Centro Virtual de Salud Pública · Código SNIES: 1301</p>
+      <p>Código SNIES: 1301</p>
     </div>
   </div>
 </footer>
+
+<!-- Lo que anuncia el lector de pantalla al cambiar de página. -->
+<p class="visually-hidden" role="status" aria-live="polite">{{ announcement() }}</p>

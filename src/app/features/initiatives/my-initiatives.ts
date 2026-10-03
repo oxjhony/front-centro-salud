@@ -3,20 +3,23 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api, errorMessage } from '../../core/api';
 import { InitiativeSummary } from '../../core/models';
+import { Icon } from '../../shared/icon';
 import { LabelPipe } from '../../shared/labels';
 
 @Component({
   selector: 'app-my-initiatives',
-  imports: [RouterLink, DatePipe, LabelPipe],
+  imports: [RouterLink, DatePipe, LabelPipe, Icon],
   template: `
     <h1>Mis iniciativas</h1>
-    <p><a class="button" routerLink="/mis-iniciativas/nueva">Nueva iniciativa</a></p>
+    <p>
+      <a class="button" [class.beacon]="initiatives()?.length === 0" routerLink="/mis-iniciativas/nueva"><app-icon name="plus" />Nueva iniciativa</a>
+    </p>
 
     @if (error()) {
       <p class="notice error" role="alert">{{ error() }}</p>
     } @else if (initiatives(); as items) {
       @if (items.length === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>Todavía no has registrado iniciativas.</strong></p>
           <p>Crea la primera con el botón «Nueva iniciativa». Se guarda como borrador y solo tú la ves hasta que la envíes a revisión.</p>
         </div>
@@ -43,7 +46,7 @@ import { LabelPipe } from '../../shared/labels';
         </div>
       }
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

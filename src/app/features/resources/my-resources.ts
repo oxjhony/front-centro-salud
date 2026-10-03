@@ -3,20 +3,23 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api, errorMessage } from '../../core/api';
 import { ResourceSummary } from '../../core/models';
+import { Icon } from '../../shared/icon';
 import { LabelPipe } from '../../shared/labels';
 
 @Component({
   selector: 'app-my-resources',
-  imports: [RouterLink, DatePipe, LabelPipe],
+  imports: [RouterLink, DatePipe, LabelPipe, Icon],
   template: `
     <h1>Mis recursos</h1>
-    <p><a class="button" routerLink="/mis-recursos/nuevo">Nuevo recurso</a></p>
+    <p>
+      <a class="button" [class.beacon]="resources()?.length === 0" routerLink="/mis-recursos/nuevo"><app-icon name="plus" />Nuevo recurso</a>
+    </p>
 
     @if (error()) {
       <p class="notice error" role="alert">{{ error() }}</p>
     } @else if (resources(); as items) {
       @if (items.length === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>Todavía no has registrado recursos.</strong></p>
           <p>Crea el primero con el botón «Nuevo recurso», carga su archivo y envíalo a revisión.</p>
         </div>
@@ -47,7 +50,7 @@ import { LabelPipe } from '../../shared/labels';
         </div>
       }
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

@@ -16,7 +16,7 @@ import { LabelPipe } from '../../shared/labels';
       <p class="notice error" role="alert">{{ error() }}</p>
     } @else if (queue(); as items) {
       @if (items.length === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>No hay contenidos pendientes de revisión.</strong></p>
           <p>Cuando un autor envíe una iniciativa, un recurso o un curso, aparecerá aquí.</p>
         </div>
@@ -47,7 +47,7 @@ import { LabelPipe } from '../../shared/labels';
         </div>
       }
     } @else {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
   `,
 })

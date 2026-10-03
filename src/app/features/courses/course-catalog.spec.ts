@@ -76,7 +76,7 @@ describe('CourseCatalog', () => {
     expect(card?.querySelector('.tags')?.textContent).toContain('Atención primaria en salud');
   });
 
-  it('cada curso ofrece su propio acceso: enlace al aula o instrucción', async () => {
+  it('la tarjeta ofrece el enlace al aula; la instrucción de acceso queda para la ficha del curso', async () => {
     const element = await render([
       course({}),
       course({ id: 'c-2', title: 'Diplomado territorial', access: { kind: 'INSTRUCTIONS', text: 'Escribe a la coordinación.' } }),
@@ -85,7 +85,7 @@ describe('CourseCatalog', () => {
     const [linked, instructed] = [...element.querySelectorAll('.card')];
     expect(linked.querySelector('a.button')?.getAttribute('href')).toBe('http://127.0.0.1:8090/course/view.php?id=2');
     expect(instructed.querySelector('a.button')).toBeNull();
-    expect(instructed.textContent).toContain('Escribe a la coordinación.');
+    expect(instructed.textContent).not.toContain('Escribe a la coordinación.');
   });
 
   it('sin resultados explica por qué y qué hacer, en lugar de una página en blanco', async () => {

@@ -14,6 +14,7 @@ import { termsOfType, TermTags } from '../../shared/taxonomy';
   imports: [FormsModule, RouterLink, LabelPipe, Pager, TermTags],
   template: `
     <h1>Iniciativas</h1>
+    <p class="lead">Proyectos, programas y experiencias de salud pública de la Universidad y sus territorios.</p>
 
     <form class="filters" role="search" (ngSubmit)="apply()">
       <div class="field">
@@ -47,8 +48,10 @@ import { termsOfType, TermTags } from '../../shared/taxonomy';
           }
         </select>
       </div>
-      <button type="submit">Buscar</button>
-      <button type="button" class="secondary" (click)="clear()">Limpiar</button>
+      <div class="filter-actions">
+        <button type="submit">Buscar</button>
+        <button type="button" class="secondary" [class.beacon]="result()?.total === 0" (click)="clear()">Limpiar</button>
+      </div>
     </form>
 
     @if (error()) {
@@ -59,7 +62,7 @@ import { termsOfType, TermTags } from '../../shared/taxonomy';
       </p>
 
       @if (page.total === 0) {
-        <div class="notice">
+        <div class="empty">
           <p><strong>No encontramos iniciativas con esos criterios.</strong></p>
           <p>Prueba con otras palabras o quita algún filtro con el botón «Limpiar».</p>
         </div>
@@ -77,7 +80,7 @@ import { termsOfType, TermTags } from '../../shared/taxonomy';
         <app-pager [page]="page" />
       }
     } @else {
-      <p>Cargando iniciativas…</p>
+      <p class="loading" role="status">Cargando iniciativas…</p>
     }
   `,
 })

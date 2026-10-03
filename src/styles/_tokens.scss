@@ -1,0 +1,85 @@
+/*
+ * CENTRO VIRTUAL DE SALUD PÚBLICA - UNIVERSIDAD DE CALDAS
+ * Fichas de diseño. La paleta es la institucional: esmeralda y dorado.
+ *
+ * Dos reglas de color que se repiten en toda la interfaz:
+ *   - Verde: navegación y acciones.
+ *   - Dorado: «estás aquí» y «mira aquí» (página actual, paso actual y pulsos).
+ *
+ * Los contrastes anotados son contra blanco y cumplen WCAG 2.2 nivel AA.
+ */
+
+:root {
+  /* Paleta institucional esmeralda / verde salud */
+  --uc-verde-principal: #064e3b;
+  --uc-verde-oscuro: #022c22;
+  --uc-esmeralda: #047857;          /* 5.5:1 — botones y enlaces */
+  --uc-esmeralda-hover: #065f46;
+  --uc-menta-suave: #ecfdf5;
+  --uc-menta-tint: #d1fae5;
+  --uc-menta-borde: #a7f3d0;
+
+  /* Dorado: orientación */
+  --uc-dorado-firme: #b45309;       /* 5.0:1 — marcadores sobre fondos claros */
+  --uc-dorado-vivo: #fbbf24;        /* marcadores sobre fondos oscuros y rellenos con texto oscuro */
+  --uc-dorado-texto: #92400e;       /* 7.1:1 */
+  --uc-dorado-suave: #fef3c7;
+  --uc-dorado-borde: #fde68a;
+
+  /* Estados */
+  --uc-peligro: #b91c1c;            /* 6.5:1 */
+  --uc-peligro-texto: #991b1b;
+  --uc-peligro-suave: #fef2f2;
+  --uc-peligro-borde: #fca5a5;
+  --uc-exito: #15803d;
+  --uc-exito-texto: #14532d;
+  --uc-exito-suave: #f0fdf4;
+  --uc-exito-borde: #86efac;
+
+  /* Superficies y textos */
+  --uc-fondo: #f4f7f5;
+  --uc-superficie: #ffffff;
+  --uc-superficie-alt: #f8faf9;
+  --uc-borde: #d5ded9;              /* decorativo: separa superficies, no delimita controles */
+  --uc-borde-firme: #6f867b;        /* 3.9:1 — contorno de campos y controles */
+  --uc-texto: #14241d;              /* 15:1 */
+  --uc-texto-suave: #44594f;        /* 7.5:1 */
+  --uc-foco: var(--uc-verde-principal);
+
+  /* Tipografía: serif con carácter para titular, sans de alta legibilidad para leer y operar */
+  --uc-fuente-titulos: 'Fraunces Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --uc-fuente-texto: 'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+
+  /* Estructura */
+  --uc-ancho-maximo: 1200px;
+  --uc-margen: 20px;
+  --uc-alto-cabecera: 68px;
+  --uc-alto-barra: 0px;             /* barra inferior de navegación: solo en pantallas pequeñas */
+  --uc-radio-sm: 6px;
+  --uc-radio: 10px;
+  --uc-radio-lg: 16px;
+  --uc-radio-xl: 24px;
+  --uc-radio-pill: 9999px;
+  --uc-sombra: 0 14px 30px -18px rgba(6, 78, 59, 0.45);
+  --uc-sombra-lg: 0 24px 48px -24px rgba(2, 44, 34, 0.5);
+
+  /* Movimiento: breve y con propósito */
+  --uc-mov-rapido: 140ms;
+  --uc-mov-medio: 240ms;
+  --uc-mov-lento: 420ms;
+  --uc-curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --uc-curva-rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Sobre los fondos verde oscuro el foco y los marcadores pasan a dorado vivo. */
+.on-dark {
+  --uc-foco: var(--uc-dorado-vivo);
+}
+
+@media (max-width: 1023.98px) {
+  :root {
+    --uc-margen: 16px;
+    --uc-alto-cabecera: 60px;
+    --uc-alto-barra: calc(62px + env(safe-area-inset-bottom, 0px));
+  }
+}

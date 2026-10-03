@@ -16,16 +16,18 @@ const TERM_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'TAG'];
   selector: 'app-initiative-form',
   imports: [FormsModule, RouterLink, LabelPipe, EditorialPanel, TermPicker, RelatedPicker],
   template: `
-    <p><a routerLink="/mis-iniciativas">← Mis iniciativas</a></p>
     <h1>{{ id() ? 'Editar iniciativa' : 'Nueva iniciativa' }}</h1>
 
     @if (!editable()) {
       <p class="notice">Esta iniciativa está en «{{ state() | label }}» y no se puede editar.</p>
     }
 
+    <div class="editor-layout">
+      <div>
     @if (catalogs(); as options) {
-      <form (ngSubmit)="save()">
-        <fieldset [disabled]="!editable() || busy()" style="border: 0; padding: 0; max-width: none">
+      <form class="panel form-panel" (ngSubmit)="save()">
+        <fieldset [disabled]="!editable() || busy()" class="plain">
+          <p class="hint">Los campos marcados con <span aria-hidden="true">*</span><span class="visually-hidden">asterisco</span> son obligatorios.</p>
           <div class="field">
             <label for="title">Título</label>
             <input id="title" name="title" type="text" required minlength="3" maxlength="255" [(ngModel)]="model.title" />
@@ -68,11 +70,12 @@ const TERM_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'TAG'];
 
           <div class="actions">
             <button type="submit">{{ busy() ? 'Guardando…' : 'Guardar borrador' }}</button>
+            <a class="button secondary" routerLink="/mis-iniciativas">Volver a mis iniciativas</a>
           </div>
         </fieldset>
       </form>
     } @else if (!error()) {
-      <p>Cargando…</p>
+      <p class="loading" role="status">Cargando…</p>
     }
 
     @if (saved()) {
@@ -82,9 +85,14 @@ const TERM_TYPES: TaxonomyType[] = ['THEME', 'TERRITORY', 'POPULATION', 'TAG'];
       <p class="notice error" role="alert">{{ error() }}</p>
     }
 
-    @if (id(); as initiativeId) {
-      <app-editorial-panel entityType="initiatives" [entityId]="initiativeId" [state]="state()" (changed)="state.set($event)" />
-    }
+      </div>
+
+      @if (id(); as initiativeId) {
+        <aside>
+          <app-editorial-panel entityType="initiatives" [entityId]="initiativeId" [state]="state()" (changed)="state.set($event)" />
+        </aside>
+      }
+    </div>
   `,
 })
 export class InitiativeForm implements OnInit {
