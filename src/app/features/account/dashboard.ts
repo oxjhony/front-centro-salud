@@ -1,0 +1,109 @@
+import { DatePipe } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Api } from '../../core/api';
+import { AuthService } from '../../core/auth';
+import { ADMIN_PERMISSIONS, NotificationRecord, Permission } from '../../core/models';
+import { label, LabelPipe } from '../../shared/labels';
+
+interface MyContent {
+  title: string;
+  route: string;
+  items: { id: string; title: string; state: string }[];
+}
+
+/**
+ * Area personal, como el tablero de Moodle: lo ultimo que le paso a la persona y acceso directo
+ * a lo que gestiona segun sus permisos.
+ */
+@Component({
+  selector: 'app-dashboard',
+  imports: [RouterLink, DatePipe, LabelPipe],
+  template: `
+    <h1>Mi área</h1>
+    @if (auth.user(); as user) {
+      <p>
+        Hola, {{ user.displayName }}.
+        <span class="meta">Roles: {{ roleNames(user.roles) }}</span>
+      </p>
+    }
+
+    <div class="dashboard">
+      <section class="card" aria-labelledby="dash-notifications">
+        <h2 id="dash-notifications">Notificaciones recientes</h2>
+        @for (item of notifications(); track item.id) {
+          <p>
+            @if (!item.readAt) {
+              <strong>{{ item.title }}</strong>
+            } @else {
+              {{ item.title }}
+            }
+            <br /><span class="meta">{{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </p>
+        } @empty {
+          <p class="meta">No tienes notificaciones.</p>
+        }
+        <p><a routerLink="/notificaciones">Ver todas</a></p>
+      </section>
+
+      @for (group of contents(); track group.route) {
+        <section class="card" [attr.aria-label]="group.title">
+          <h2>{{ group.title }}</h2>
+          @for (item of group.items.slice(0, 5); track item.id) {
+            <p>
+              <a [routerLink]="[group.route, item.id]">{{ item.title }}</a><br />
+              <span class="state" [attr.data-state]="item.state">{{ item.state | label }}</span>
+            </p>
+          } @empty {
+            <p class="meta">Todavía no tienes contenidos aquí.</p>
+          }
+          <p><a [routerLink]="group.route">Ir a {{ group.title.toLowerCase() }}</a></p>
+        </section>
+      }
+
+      <section class="card" aria-labelledby="dash-shortcuts">
+        <h2 id="dash-shortcuts">Accesos</h2>
+        <ul class="related-list">
+          <li><a routerLink="/mi-perfil">Mi perfil</a></li>
+          @if (auth.can(Permission.ContentReview)) {
+            <li><a routerLink="/revision">Bandeja de revisión</a></li>
+          }
+          @if (auth.canAny(adminPermissions)) {
+            <li><a routerLink="/administracion">Administración</a></li>
+          }
+          <li><a routerLink="/buscar">Buscar en el portal</a></li>
+        </ul>
+      </section>
+    </div>
+  `,
+})
+export class Dashboard implements OnInit {
+  private readonly api = inject(Api);
+  protected readonly auth = inject(AuthService);
+  protected readonly Permission = Permission;
+  protected readonly adminPermissions = ADMIN_PERMISSIONS;
+
+  protected readonly notifications = signal<NotificationRecord[]>([]);
+  protected readonly contents = signal<MyContent[]>([]);
+
+  async ngOnInit(): Promise<void> {
+    const can = (permission: string) => this.auth.can(permission);
+    const [notifications, initiatives, resources, courses] = await Promise.all([
+      this.api.notifications().catch(() => ({ items: [] as NotificationRecord[], unread: 0 })),
+      can(Permission.InitiativeManage) ? this.api.myInitiatives().catch(() => []) : null,
+      can(Permission.ResourceManage) ? this.api.myResources().catch(() => []) : null,
+      can(Permission.CourseManage) ? this.api.myCourses().catch(() => []) : null,
+    ]);
+    this.notifications.set(notifications.items.slice(0, 5));
+    const groups: (MyContent | null)[] = [
+      initiatives && { title: 'Mis iniciativas', route: '/mis-iniciativas', items: initiatives },
+      resources && { title: 'Mis recursos', route: '/mis-recursos', items: resources },
+      courses && { title: 'Mis cursos', route: '/mis-cursos', items: courses },
+    ];
+    this.contents.set(groups.filter((group): group is MyContent => group !== null));
+  }
+
+  protected roleNames(roles: string[]): string {
+    return roles.map(label).join(', ') || 'sin roles';
+  }
+}
