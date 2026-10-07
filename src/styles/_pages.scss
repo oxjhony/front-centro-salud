@@ -15,18 +15,19 @@
   pointer-events: none;
 }
 
-/* ----------------------------------------------------------------- Portada: bienvenida */
+/* ----------------------------------------------------------------- Portada: bienvenida
+ * Bloque oscuro de esquinas amplias con el titular en blanco y de mucho peso. */
 .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(28px, 5.5vw, 72px);
-  border: 1px solid var(--uc-borde);
+  padding: clamp(32px, 6vw, 88px) clamp(24px, 5.5vw, 72px);
   border-radius: var(--uc-radio-xl);
-  background-color: var(--uc-superficie);
+  background: linear-gradient(90deg, var(--uc-verde-oscuro) 0%, var(--uc-verde-principal) 34%);
+  color: rgba(255, 255, 255, 0.9);
 
   &::before {
-    @include relieve(var(--uc-esmeralda), 0.3);
+    @include relieve(#ffffff, 0.2);
     inset: 0 0 0 34%;
   }
 
@@ -36,28 +37,39 @@
     position: absolute;
     z-index: -1;
     inset: 0 0 0 34%;
-    background: linear-gradient(90deg, var(--uc-superficie) 0%, rgba(255, 255, 255, 0.72) 34%, rgba(255, 255, 255, 0) 78%);
+    background: linear-gradient(90deg, var(--uc-verde-principal) 0%, rgba(6, 78, 59, 0.7) 34%, rgba(6, 78, 59, 0) 78%);
     pointer-events: none;
   }
 
   .hero-text {
-    max-width: 660px;
+    max-width: 680px;
+  }
+
+  .eyebrow {
+    color: var(--uc-menta-borde);
   }
 
   h1 {
-    font-size: clamp(2.3rem, 1.3rem + 4.4vw, 4.1rem);
+    color: #ffffff;
+    font-size: clamp(2.4rem, 1.3rem + 4.8vw, 4.5rem);
+    font-weight: 800;
     line-height: 1.02;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.035em;
     margin-bottom: 0.45em;
 
     em {
-      color: var(--uc-esmeralda);
-      font-weight: 500;
+      color: var(--uc-dorado-vivo);
+      font-style: normal;
     }
   }
 
   .lead {
+    color: rgba(255, 255, 255, 0.9);
     font-size: clamp(1.05rem, 1rem + 0.4vw, 1.25rem);
+  }
+
+  label {
+    color: #ffffff;
   }
 }
 
@@ -67,10 +79,10 @@
   z-index: -1;
   width: 14px;
   height: 14px;
-  border: 3px solid var(--uc-superficie);
+  border: 3px solid var(--uc-verde-principal);
   border-radius: 50%;
-  background-color: var(--uc-dorado-firme);
-  box-shadow: 0 0 0 1.5px var(--uc-dorado-firme);
+  background-color: var(--uc-dorado-vivo);
+  box-shadow: 0 0 0 1.5px var(--uc-dorado-vivo);
 
   &:nth-child(1) {
     top: 34%;
@@ -101,11 +113,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 6px 6px 16px;
+  padding: 6px 6px 6px 22px;
   border: 1.5px solid var(--uc-borde-firme);
-  border-radius: 14px;
+  border-radius: var(--uc-radio-pill);
   background-color: var(--uc-superficie);
-  box-shadow: var(--uc-sombra);
   transition: border-color var(--uc-mov-rapido) ease;
 
   > app-icon {
@@ -126,6 +137,15 @@
     }
   }
 
+  /* El botón vive sobre la caja blanca: su anillo de foco vuelve a ser verde. */
+  button {
+    --uc-foco: var(--uc-verde-principal);
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
+  }
+
   /* El foco del campo se dibuja en toda la caja. */
   &:has(input:focus-visible) {
     border-color: var(--uc-esmeralda);
@@ -134,43 +154,47 @@
   }
 }
 
+/* Sugerencias: píldoras translúcidas sobre el bloque oscuro. */
 .suggestions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin: 16px 0 0;
-  color: var(--uc-texto-suave);
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.82);
   font-size: 0.93rem;
 
   a {
     display: inline-flex;
     align-items: center;
-    min-height: 34px;
-    padding: 4px 14px;
-    border: 1px solid var(--uc-borde-firme);
+    min-height: 36px;
+    padding: 4px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
     border-radius: var(--uc-radio-pill);
-    background-color: var(--uc-superficie);
-    color: var(--uc-verde-principal);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
     font-weight: 600;
     text-decoration: none;
     transition:
-      background-color var(--uc-mov-rapido) ease,
-      border-color var(--uc-mov-rapido) ease;
+      background-color var(--uc-mov-medio) var(--uc-curva),
+      border-color var(--uc-mov-medio) var(--uc-curva);
 
     &:hover {
-      border-color: var(--uc-esmeralda);
-      background-color: var(--uc-menta-suave);
+      border-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
     }
   }
 }
 
 /* ----------------------------------------------------------------- Portada: secciones */
 .section-head {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 
   h2 {
     margin: 0;
+    font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.6rem);
+    line-height: 1.08;
   }
 
   p:not(.eyebrow) {
@@ -180,7 +204,7 @@
   }
 }
 
-/* Título a un lado y contenido al otro: composición de revista, no de plantilla. */
+/* Título a un lado y contenido al otro. */
 .split {
   display: grid;
   gap: 20px 56px;
@@ -198,7 +222,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 2px solid var(--uc-verde-principal);
+  border-top: 1px solid var(--uc-borde);
 }
 
 .index-row {
@@ -206,12 +230,12 @@
   grid-template-columns: 3.2rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 6px 20px;
-  padding: 24px 16px 24px 8px;
+  padding: 28px 16px 28px 8px;
   border-bottom: 1px solid var(--uc-borde);
   color: var(--uc-texto);
   text-decoration: none;
   transition:
-    background-color var(--uc-mov-medio) ease,
+    background-color var(--uc-mov-medio) var(--uc-curva),
     padding var(--uc-mov-medio) var(--uc-curva);
 
   .index-num {
@@ -219,8 +243,9 @@
     color: var(--uc-dorado-firme);
     font-family: var(--uc-fuente-titulos);
     font-size: 2.1rem;
-    font-weight: 500;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
     line-height: 1.05;
   }
 
@@ -229,10 +254,9 @@
     align-items: center;
     gap: 10px;
     margin: 0 0 4px;
-    font-family: var(--uc-fuente-titulos);
-    font-size: 1.55rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
     transition: color var(--uc-mov-rapido) ease;
 
     .icon {
@@ -250,13 +274,21 @@
     font-size: 0.9rem;
   }
 
+  /* La acción del renglón es una píldora que se rellena al pasar por él. */
   .index-go {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    min-height: 44px;
+    padding: 8px 20px;
+    border: 1.5px solid var(--uc-esmeralda);
+    border-radius: var(--uc-radio-pill);
     color: var(--uc-esmeralda);
-    font-weight: 700;
+    font-weight: 600;
     white-space: nowrap;
+    transition:
+      background-color var(--uc-mov-medio) var(--uc-curva),
+      color var(--uc-mov-medio) var(--uc-curva);
 
     .icon {
       transition: transform var(--uc-mov-medio) var(--uc-curva);
@@ -265,15 +297,20 @@
 
   &:hover {
     padding-left: 18px;
-    background-color: var(--uc-superficie);
+    background-color: var(--uc-superficie-alt);
     color: var(--uc-texto);
 
     h3 {
       color: var(--uc-esmeralda);
     }
 
+    .index-go {
+      background-color: var(--uc-esmeralda);
+      color: #ffffff;
+    }
+
     .index-go .icon {
-      transform: translateX(6px);
+      transform: translateX(4px);
     }
   }
 }
@@ -283,15 +320,16 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 14px;
-  margin-top: 20px;
-  padding: 16px 18px;
-  border: 1.5px dashed var(--uc-borde-firme);
+  margin-top: 24px;
+  padding: 18px 22px;
+  border: 1px solid transparent;
   border-radius: var(--uc-radio-lg);
+  background-color: var(--uc-menta-suave);
   color: var(--uc-texto);
   text-decoration: none;
   transition:
-    background-color var(--uc-mov-rapido) ease,
-    border-color var(--uc-mov-rapido) ease;
+    background-color var(--uc-mov-medio) var(--uc-curva),
+    border-color var(--uc-mov-medio) var(--uc-curva);
 
   > app-icon {
     color: var(--uc-esmeralda);
@@ -318,62 +356,57 @@
   }
 }
 
-/* Compromisos: una franja oscura que da ritmo a la página. */
+/* Compromisos: tres bloques planos de esquinas amplias, cada uno con su icono. */
 .pillars {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px 44px;
-  padding: clamp(28px, 4.5vw, 56px);
-  border-radius: var(--uc-radio-xl);
-  background-color: var(--uc-verde-principal);
-  color: rgba(255, 255, 255, 0.88);
-
-  &::before {
-    @include relieve(#ffffff, 0.09);
-    inset: 0;
-  }
+  gap: 20px;
 
   h2 {
     grid-column: 1 / -1;
-    margin: 0;
-    color: var(--uc-dorado-vivo);
-    font-family: var(--uc-fuente-texto);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    margin: 0 0 4px;
+    font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.6rem);
+    line-height: 1.08;
+  }
+
+  > div {
+    padding: 28px;
+    border-radius: var(--uc-radio-lg);
+    background-color: var(--uc-superficie-alt);
   }
 
   h3 {
-    margin: 12px 0 6px;
-    color: #ffffff;
-    font-family: var(--uc-fuente-titulos);
-    font-size: 1.35rem;
-    font-weight: 600;
+    margin: 18px 0 6px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
 
   p {
     margin: 0;
+    color: var(--uc-texto-suave);
   }
 
   app-icon {
-    color: var(--uc-dorado-vivo);
-    font-size: 1.5rem;
+    display: inline-grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: var(--uc-esmeralda);
+    color: #ffffff;
+    font-size: 1.3rem;
   }
 }
 
 /* ----------------------------------------------------------------- Ingreso */
 .auth {
   display: grid;
-  max-width: 980px;
+  max-width: 1000px;
   margin: 12px auto 0;
   overflow: hidden;
-  border: 1px solid var(--uc-borde);
   border-radius: var(--uc-radio-xl);
-  background-color: var(--uc-superficie);
+  background-color: var(--uc-superficie-alt);
 
   .auth-form {
     padding: clamp(24px, 4.5vw, 56px);
@@ -392,7 +425,7 @@
     justify-content: flex-end;
     gap: 10px;
     padding: clamp(24px, 4.5vw, 56px);
-    background-color: var(--uc-verde-principal);
+    background: linear-gradient(160deg, var(--uc-verde-principal) 0%, var(--uc-verde-oscuro) 100%);
     color: rgba(255, 255, 255, 0.88);
 
     &::before {
@@ -407,10 +440,10 @@
     .auth-quote {
       color: #ffffff;
       font-family: var(--uc-fuente-titulos);
-      font-size: 1.7rem;
-      font-weight: 500;
-      line-height: 1.18;
-      letter-spacing: -0.015em;
+      font-size: 1.9rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
     }
   }
 }
@@ -457,11 +490,11 @@
     }
 
     &::before {
-      opacity: 0.13;
+      opacity: 0.1;
     }
 
     &::after {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.55) 100%);
+      background: linear-gradient(180deg, rgba(6, 78, 59, 0.75) 0%, rgba(6, 78, 59, 0.35) 100%);
     }
   }
 
@@ -487,7 +520,8 @@
 
     .index-go {
       grid-column: 2;
-      margin-top: 4px;
+      justify-self: start;
+      margin-top: 8px;
     }
   }
 

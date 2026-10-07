@@ -1,6 +1,9 @@
 /*
  * CENTRO VIRTUAL DE SALUD PÚBLICA - UNIVERSIDAD DE CALDAS
- * Fichas de diseño. La paleta es la institucional: esmeralda y dorado.
+ * Fichas de diseño. El lenguaje visual es el de los portales de la casa (BIOS y ACEMATE):
+ * fondo blanco, superficies planas, una sola familia sin serifas con titulares de mucho peso,
+ * botones en píldora, esquinas amplias y un bloque oscuro que abre y otro que cierra la página.
+ * Cada portal conserva su color: aquí, esmeralda y dorado.
  *
  * Dos reglas de color que se repiten en toda la interfaz:
  *   - Verde: navegación y acciones.
@@ -36,38 +39,38 @@
   --uc-exito-suave: #f0fdf4;
   --uc-exito-borde: #86efac;
 
-  /* Superficies y textos */
-  --uc-fondo: #f4f7f5;
+  /* Superficies y textos: página blanca y bloques en gris verdoso muy claro, sin sombras */
+  --uc-fondo: #ffffff;
   --uc-superficie: #ffffff;
-  --uc-superficie-alt: #f8faf9;
-  --uc-borde: #d5ded9;              /* decorativo: separa superficies, no delimita controles */
+  --uc-superficie-alt: #f3f6f4;
+  --uc-borde: #dbe2de;              /* decorativo: separa superficies, no delimita controles */
   --uc-borde-firme: #6f867b;        /* 3.9:1 — contorno de campos y controles */
   --uc-texto: #14241d;              /* 15:1 */
-  --uc-texto-suave: #44594f;        /* 7.5:1 */
+  --uc-texto-suave: #4d5b55;        /* 7.1:1 */
   --uc-foco: var(--uc-verde-principal);
 
-  /* Tipografía: serif con carácter para titular, sans de alta legibilidad para leer y operar */
-  --uc-fuente-titulos: 'Fraunces Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  /* Tipografía: una sola voz sin serifas. Mona Sans titula; Atkinson Hyperlegible se lee y opera. */
+  --uc-fuente-titulos: 'Mona Sans Variable', 'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
   --uc-fuente-texto: 'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
 
   /* Estructura */
-  --uc-ancho-maximo: 1200px;
-  --uc-margen: 20px;
-  --uc-alto-cabecera: 68px;
+  --uc-ancho-maximo: 1240px;
+  --uc-margen: 24px;
+  --uc-alto-cabecera: 76px;
   --uc-alto-barra: 0px;             /* barra inferior de navegación: solo en pantallas pequeñas */
-  --uc-radio-sm: 6px;
-  --uc-radio: 10px;
-  --uc-radio-lg: 16px;
-  --uc-radio-xl: 24px;
+  --uc-radio-sm: 8px;
+  --uc-radio: 14px;
+  --uc-radio-lg: 24px;
+  --uc-radio-xl: 32px;
   --uc-radio-pill: 9999px;
-  --uc-sombra: 0 14px 30px -18px rgba(6, 78, 59, 0.45);
-  --uc-sombra-lg: 0 24px 48px -24px rgba(2, 44, 34, 0.5);
+  --uc-sombra: 0 1px 8px rgba(20, 36, 29, 0.1);
+  --uc-sombra-lg: 0 12px 32px -14px rgba(2, 44, 34, 0.3);
 
   /* Movimiento: breve y con propósito */
   --uc-mov-rapido: 140ms;
-  --uc-mov-medio: 240ms;
+  --uc-mov-medio: 260ms;
   --uc-mov-lento: 420ms;
-  --uc-curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --uc-curva: cubic-bezier(0.16, 1, 0.3, 1);
   --uc-curva-rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 

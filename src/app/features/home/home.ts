@@ -42,7 +42,7 @@ const PATHS = [
   imports: [RouterLink, FormsModule, DatePipe, LabelPipe, Icon],
   template: `
     <!-- Bienvenida: que es el portal y la accion principal, buscar -->
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero on-dark" aria-labelledby="hero-title">
       <div class="hero-text">
         <p class="eyebrow">Universidad de Caldas · Facultad de Ciencias para la Salud</p>
         <h1 id="hero-title">Centro Virtual de <em>Salud Pública</em></h1>
@@ -122,7 +122,7 @@ const PATHS = [
     }
 
     <!-- Compromisos del Centro -->
-    <section class="pillars on-dark" aria-labelledby="pillars-title">
+    <section class="pillars" aria-labelledby="pillars-title">
       <h2 id="pillars-title">Cómo trabajamos</h2>
       <div>
         <app-icon name="mountain" />

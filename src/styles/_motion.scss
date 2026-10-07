@@ -151,7 +151,7 @@
     content: '';
     position: absolute;
     inset: -6px;
-    border-radius: calc(var(--uc-radio) + 5px);
+    border-radius: var(--uc-radio-pill);
     pointer-events: none;
   }
 

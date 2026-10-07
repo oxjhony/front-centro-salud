@@ -1,19 +1,11 @@
 /* ----------------------------------------------------------------- Tipografías locales
  * Se sirven desde public/fonts: el portal no depende de servicios externos para verse bien. */
 @font-face {
-  font-family: 'Fraunces Variable';
+  font-family: 'Mona Sans Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url('/fonts/fraunces-latin-opsz-normal.woff2') format('woff2-variations');
-}
-
-@font-face {
-  font-family: 'Fraunces Variable';
-  font-style: italic;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url('/fonts/fraunces-latin-wght-italic.woff2') format('woff2-variations');
+  font-weight: 200 900;
+  src: url('/fonts/mona-sans-latin-wght-normal.woff2') format('woff2-variations');
 }
 
 @font-face {
@@ -89,25 +81,33 @@ h4 {
 }
 
 h1,
-h2 {
+h2,
+h3,
+h4 {
   font-family: var(--uc-fuente-titulos);
-  font-weight: 600;
-  letter-spacing: -0.015em;
+}
+
+h1,
+h2 {
+  font-weight: 800;
+  letter-spacing: -0.025em;
 }
 
 h1 {
-  font-size: clamp(1.9rem, 1.35rem + 2.3vw, 2.75rem);
-  line-height: 1.08;
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+  line-height: 1.06;
   margin-bottom: 0.4em;
 }
 
 h2 {
-  font-size: clamp(1.35rem, 1.2rem + 0.6vw, 1.6rem);
+  font-size: clamp(1.4rem, 1.2rem + 0.9vw, 1.85rem);
+  line-height: 1.15;
 }
 
 h3 {
-  font-size: 1.1rem;
+  font-size: 1.125rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 h4 {
@@ -141,10 +141,10 @@ p {
 }
 
 .eyebrow {
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.75rem;
   font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--uc-esmeralda);
 }
@@ -238,8 +238,8 @@ app-icon {
   top: 8px;
   left: 8px;
   z-index: 3000;
-  padding: 12px 18px;
-  border-radius: var(--uc-radio);
+  padding: 12px 20px;
+  border-radius: var(--uc-radio-pill);
   background-color: var(--uc-verde-principal);
   color: #ffffff;
   font-weight: 700;

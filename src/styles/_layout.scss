@@ -79,11 +79,11 @@
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.12;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
 
     span {
       display: block;
-      font-style: italic;
+      font-weight: 800;
       color: var(--uc-esmeralda);
     }
   }
@@ -98,7 +98,7 @@
   ul {
     display: flex;
     align-items: stretch;
-    gap: 2px;
+    gap: 4px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -110,23 +110,25 @@
     align-items: center;
     gap: 8px;
     min-height: 44px;
-    padding: 8px 13px;
-    border-radius: var(--uc-radio);
-    color: var(--uc-verde-principal);
-    font-size: 0.975rem;
-    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--uc-radio-sm);
+    color: var(--uc-texto-suave);
+    font-size: 1rem;
+    font-weight: 550;
     text-decoration: none;
     white-space: nowrap;
-    transition: background-color var(--uc-mov-rapido) ease;
+    transition:
+      background-color var(--uc-mov-medio) var(--uc-curva),
+      color var(--uc-mov-medio) var(--uc-curva);
 
     /* Marcador dorado de «estás aquí»: crece desde el centro al entrar a la sección. */
     &::after {
       content: '';
       position: absolute;
-      left: 13px;
-      right: 13px;
-      bottom: 3px;
-      height: 3px;
+      left: 14px;
+      right: 14px;
+      bottom: 5px;
+      height: 2px;
       border-radius: 2px;
       background-color: var(--uc-dorado-firme);
       transform: scaleX(0);
@@ -135,10 +137,14 @@
 
     &:hover {
       background-color: var(--uc-menta-suave);
+      color: var(--uc-verde-principal);
     }
 
+    /* Estás aquí: fondo menta, texto esmeralda y el marcador dorado. */
     &.active {
-      font-weight: 750;
+      background-color: var(--uc-menta-suave);
+      color: var(--uc-esmeralda);
+      font-weight: 700;
 
       &::after {
         transform: scaleX(1);
@@ -158,21 +164,24 @@
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  padding: 8px 18px;
+  padding: 8px 22px;
   border: 1.5px solid var(--uc-esmeralda);
-  border-radius: var(--uc-radio);
-  background-color: var(--uc-superficie);
-  color: var(--uc-verde-principal);
-  font-weight: 650;
+  border-radius: var(--uc-radio-pill);
+  background-color: var(--uc-esmeralda);
+  color: #ffffff;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
   transition:
-    background-color var(--uc-mov-rapido) ease,
-    color var(--uc-mov-rapido) ease;
+    background-color var(--uc-mov-medio) var(--uc-curva),
+    border-color var(--uc-mov-medio) var(--uc-curva),
+    transform var(--uc-mov-medio) var(--uc-curva);
 
   &:hover {
-    background-color: var(--uc-esmeralda);
+    border-color: var(--uc-esmeralda-hover);
+    background-color: var(--uc-esmeralda-hover);
     color: #ffffff;
+    transform: translateX(2px);
   }
 }
 
@@ -180,8 +189,8 @@
  * Todo lo de la persona en un solo lugar. A la izquierda los accesos como pestañas: su área, su
  * perfil y, después del separador, lo que gestiona. A la derecha sus avisos, quién es y salir. */
 .account-bar {
-  background-color: var(--uc-menta-suave);
-  border-bottom: 1px solid var(--uc-menta-borde);
+  background-color: var(--uc-superficie-alt);
+  border-bottom: 1px solid var(--uc-borde);
 
   .account-inner {
     display: flex;
@@ -216,7 +225,7 @@
   ul + ul {
     margin-left: 12px;
     padding-left: 12px;
-    background: linear-gradient(var(--uc-menta-borde), var(--uc-menta-borde)) left center / 1px 22px no-repeat;
+    background: linear-gradient(var(--uc-borde), var(--uc-borde)) left center / 1px 22px no-repeat;
   }
 
   a {
@@ -224,19 +233,20 @@
     align-items: center;
     gap: 8px;
     min-height: 46px;
-    padding: 8px 13px;
+    padding: 8px 15px;
     border: 1px solid transparent;
     border-bottom: 0;
     border-radius: var(--uc-radio) var(--uc-radio) 0 0;
-    color: var(--uc-verde-principal);
+    color: var(--uc-texto-suave);
     font-size: 0.95rem;
-    font-weight: 650;
+    font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
     transition: background-color var(--uc-mov-rapido) ease;
 
     &:hover {
-      background-color: var(--uc-menta-tint);
+      background-color: var(--uc-menta-suave);
+      color: var(--uc-verde-principal);
     }
 
     /* Dentro de un contenedor con desplazamiento el anillo se dibuja hacia adentro. */
@@ -246,8 +256,10 @@
 
     /* Estás aquí: la pestaña toma el color de la página y lleva el marcador dorado. */
     &.active {
-      border-color: var(--uc-menta-borde);
+      border-color: var(--uc-borde);
       background-color: var(--uc-fondo);
+      color: var(--uc-verde-principal);
+      font-weight: 700;
       box-shadow: inset 0 3px 0 var(--uc-dorado-firme);
     }
   }
@@ -291,7 +303,7 @@
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
-  border: 2px solid var(--uc-menta-suave);
+  border: 2px solid var(--uc-superficie-alt);
   border-radius: var(--uc-radio-pill);
   background-color: var(--uc-dorado-vivo);
   color: var(--uc-verde-oscuro);
@@ -308,7 +320,7 @@
   gap: 8px;
   margin-block: 5px;
   padding-left: 12px;
-  border-left: 1px solid var(--uc-menta-borde);
+  border-left: 1px solid var(--uc-borde);
 }
 
 .user-pill {
@@ -419,7 +431,7 @@ button.btn-logout {
 /* ----------------------------------------------------------------- Contenido principal */
 .page {
   flex: 1 0 auto;
-  padding-block: 20px 72px;
+  padding-block: 24px 88px;
 }
 
 /* ----------------------------------------------------------------- Pie de página */
@@ -427,7 +439,9 @@ button.btn-logout {
   position: relative;
   margin-top: auto;
   overflow: hidden;
-  background-color: var(--uc-verde-principal);
+  /* Un bloque oscuro de esquinas amplias cierra la página. */
+  border-radius: var(--uc-radio-xl) var(--uc-radio-xl) 0 0;
+  background-color: var(--uc-verde-oscuro);
   color: rgba(255, 255, 255, 0.86);
   font-size: 0.925rem;
 
@@ -448,16 +462,16 @@ button.btn-logout {
     display: grid;
     grid-template-columns: 1.7fr 1fr 1.2fr 1.3fr;
     gap: 32px 28px;
-    padding-block: 52px 36px;
+    padding-block: 64px 40px;
   }
 
   h2 {
     margin-bottom: 14px;
-    color: #ffffff;
+    color: var(--uc-dorado-vivo);
     font-family: var(--uc-fuente-texto);
     font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
@@ -500,9 +514,10 @@ button.btn-logout {
       margin: 0;
       color: #ffffff;
       font-family: var(--uc-fuente-titulos);
-      font-size: 1.15rem;
-      font-weight: 600;
+      font-size: 1.2rem;
+      font-weight: 800;
       line-height: 1.15;
+      letter-spacing: -0.015em;
 
       span {
         display: block;
@@ -529,7 +544,7 @@ button.btn-logout {
 
   .footer-legal {
     position: relative;
-    background-color: var(--uc-verde-oscuro);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
     font-size: 0.8125rem;
 
     .wrap {
@@ -594,6 +609,11 @@ button.btn-logout {
       font-size: 0.74rem;
       font-weight: 600;
 
+      &:hover,
+      &.active {
+        background-color: transparent;
+      }
+
       .icon {
         width: 22px;
         height: 22px;
@@ -605,6 +625,7 @@ button.btn-logout {
         bottom: auto;
         left: 22%;
         right: 22%;
+        height: 3px;
         border-radius: 0 0 3px 3px;
       }
 
@@ -636,9 +657,13 @@ button.btn-logout {
     max-width: 12ch;
   }
 
+  .site-footer {
+    border-radius: var(--uc-radio-lg) var(--uc-radio-lg) 0 0;
+  }
+
   .site-footer .footer-main {
     grid-template-columns: 1fr 1fr;
-    padding-block: 40px 28px;
+    padding-block: 44px 28px;
   }
 }
 
