@@ -22,6 +22,8 @@ const SECTIONS: Record<string, Section> = {
   iniciativas: { label: 'Iniciativas', child: () => 'Ficha de la iniciativa' },
   recursos: { label: 'Recursos', child: () => 'Ficha del recurso' },
   cursos: { label: 'Cursos', child: () => 'Ficha del curso' },
+  'quienes-somos': { label: 'Quiénes somos' },
+  'nuestro-equipo': { label: 'Nuestro equipo' },
   buscar: { label: 'Buscar' },
   ingresar: { label: 'Ingresar' },
   'mi-area': { label: 'Mi área' },

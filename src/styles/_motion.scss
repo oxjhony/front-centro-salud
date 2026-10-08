@@ -4,9 +4,12 @@
  *   - ¿Pasó algo?          La campana pulsa cuando hay avisos nuevos.
  *   - ¿Qué sigue?          El siguiente paso recomendado queda rodeado por un halo dorado.
  *   - ¿Está trabajando?    Cargando, guardado y cambios de página se ven.
+ *   - ¿Qué hay de nuevo?   La portada se desliza entre diapositivas y el texto de «Quiénes somos»
+ *                          y «Nuestro equipo» aparece al llegar a él.
  *
  * Reglas (WCAG 2.2.2 y 2.3.3):
  *   - Los pulsos se repiten tres veces (menos de cinco segundos) y se detienen solos.
+ *   - El carrusel de la portada tiene botón de pausa y espera mientras el cursor o el foco están en él.
  *   - Nada parpadea más de tres veces por segundo.
  *   - Con «reducir movimiento» activo en el sistema, todo queda quieto y sigue entendiéndose.
  */
@@ -85,7 +88,7 @@
 .index-list > li,
 .dashboard > *,
 .notification-list > li,
-.hero-text > * {
+.hero-slide.active .hero-text > * {
   animation: uc-subir var(--uc-mov-lento) var(--uc-curva) backwards;
 
   &:nth-child(2) {
@@ -116,6 +119,53 @@
 
 .notice.ok::before {
   animation: uc-aparecer var(--uc-mov-lento) var(--uc-curva-rebote) backwards;
+}
+
+/* ----------------------------------------------------------------- Texto que aparece al llegar
+ * `appReveal` pone `.reveal` (oculto) y luego `.visible` cuando el bloque entra en pantalla.
+ * Los títulos y párrafos suben palabra por palabra; `--i` es el turno de cada una. */
+app-reveal-text .word {
+  display: inline-block;
+}
+
+.reveal {
+  .word,
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(0.55em);
+  }
+
+  &.visible .word,
+  &.visible .reveal-item {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--uc-mov-lento) ease,
+      transform 600ms var(--uc-curva);
+    transition-delay: calc(var(--espera, 0ms) + var(--i, 0) * var(--paso, 60ms));
+  }
+
+  h2 {
+    --paso: 70ms;
+  }
+
+  p {
+    --paso: 14ms;
+    --espera: 350ms;
+  }
+
+  .about-text p + p {
+    --espera: 800ms;
+  }
+
+  .eyebrow.reveal-item {
+    --espera: 0ms;
+  }
+
+  li.reveal-item {
+    --paso: 90ms;
+    --espera: 600ms;
+  }
 }
 
 /* ----------------------------------------------------------------- Avisos nuevos
@@ -225,6 +275,7 @@
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
 
   ::view-transition-group(*),

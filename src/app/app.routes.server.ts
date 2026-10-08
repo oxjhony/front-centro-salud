@@ -14,5 +14,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'recursos/:id', renderMode: RenderMode.Server },
   { path: 'cursos', renderMode: RenderMode.Server },
   { path: 'cursos/:id', renderMode: RenderMode.Server },
+  { path: 'quienes-somos', renderMode: RenderMode.Server },
+  { path: 'nuestro-equipo', renderMode: RenderMode.Server },
   { path: '**', renderMode: RenderMode.Client },
 ];

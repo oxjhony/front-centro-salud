@@ -16,13 +16,25 @@
 }
 
 /* ----------------------------------------------------------------- Portada: bienvenida
- * Bloque oscuro de esquinas amplias con el titular en blanco y de mucho peso. */
+ * La portada ocupa todo el ancho de la ventana: el bloque de bienvenida va de borde a borde y
+ * las demás secciones conservan el ancho de lectura del portal. */
+.page:has(> app-home) {
+  width: 100%;
+  padding-top: 0;
+}
+
+app-home > section:not(.hero) {
+  width: min(100% - 2 * var(--uc-margen), var(--uc-ancho-maximo));
+  margin-inline: auto;
+}
+
+/* Bloque oscuro de borde a borde con el titular en blanco y de mucho peso. Es un carrusel:
+ * las diapositivas se deslizan de lado y el buscador queda fijo debajo. */
 .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(32px, 6vw, 88px) clamp(24px, 5.5vw, 72px);
-  border-radius: var(--uc-radio-xl);
+  padding-block: clamp(36px, 6vw, 84px) clamp(28px, 4vw, 48px);
   background: linear-gradient(90deg, var(--uc-verde-oscuro) 0%, var(--uc-verde-principal) 34%);
   color: rgba(255, 255, 255, 0.9);
 
@@ -49,13 +61,14 @@
     color: var(--uc-menta-borde);
   }
 
-  h1 {
+  h1,
+  .hero-title {
     color: #ffffff;
     font-size: clamp(2.4rem, 1.3rem + 4.8vw, 4.5rem);
     font-weight: 800;
     line-height: 1.02;
     letter-spacing: -0.035em;
-    margin-bottom: 0.45em;
+    margin: 0 0 0.45em;
 
     em {
       color: var(--uc-dorado-vivo);
@@ -70,6 +83,124 @@
 
   label {
     color: #ffffff;
+  }
+}
+
+/* El carril lleva todas las diapositivas en fila y se desplaza una ventana cada vez. */
+.hero-viewport {
+  overflow: hidden;
+}
+
+.hero-track {
+  display: flex;
+  transition: transform 700ms var(--uc-curva);
+}
+
+.hero-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* La acción de cada diapositiva: píldora dorada sobre el bloque oscuro. */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 10px 26px;
+  border-radius: var(--uc-radio-pill);
+  background-color: var(--uc-dorado-vivo);
+  color: var(--uc-verde-oscuro);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color var(--uc-mov-medio) var(--uc-curva);
+
+  .icon {
+    transition: transform var(--uc-mov-medio) var(--uc-curva);
+  }
+
+  &:hover {
+    background-color: var(--uc-dorado-borde);
+    color: var(--uc-verde-oscuro);
+
+    .icon {
+      transform: translateX(4px);
+    }
+  }
+}
+
+/* Debajo de las diapositivas: el buscador, que no se mueve, y los controles del carrusel. */
+.hero-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 32px;
+  margin-top: clamp(24px, 3vw, 40px);
+
+  > div:first-child {
+    flex: 1 1 420px;
+    min-width: 0;
+  }
+}
+
+.hero-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  > button {
+    width: 44px;
+    padding: 0;
+    border-color: rgba(255, 255, 255, 0.32);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &:hover .icon {
+      transform: none;
+    }
+  }
+}
+
+/* Un punto por diapositiva; el de la actual se alarga y pasa a dorado («estás aquí»). */
+.hero-dots {
+  display: flex;
+  align-items: center;
+  margin: 0 4px;
+  padding: 0;
+  list-style: none;
+
+  button {
+    min-height: 28px;
+    padding: 9px 7px;
+    border: 0;
+    background: none;
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: var(--uc-radio-pill);
+      background-color: rgba(255, 255, 255, 0.5);
+      transition:
+        width var(--uc-mov-lento) var(--uc-curva),
+        background-color var(--uc-mov-medio) var(--uc-curva);
+    }
+
+    &:hover::before {
+      background-color: #ffffff;
+    }
+
+    &[aria-current]::before {
+      width: 30px;
+      background-color: var(--uc-dorado-vivo);
+    }
   }
 }
 
@@ -102,7 +233,6 @@
 
 .search-hero {
   max-width: 620px;
-  margin-top: 28px;
 
   label {
     font-size: 1rem;
@@ -399,6 +529,62 @@
   }
 }
 
+/* Quiénes somos: el primer párrafo se lee como una declaración. */
+.about-text p {
+  margin: 0 0 1.1rem;
+  font-size: 1.0625rem;
+
+  &:first-child {
+    color: var(--uc-verde-principal);
+    font-size: clamp(1.2rem, 1.05rem + 0.7vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.42;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Nuestro equipo: un bloque por área, con el icono sobre verde y dorado. */
+.team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    padding: 28px;
+    border-radius: var(--uc-radio-lg);
+    background-color: var(--uc-superficie-alt);
+  }
+
+  h3 {
+    margin: 18px 0 6px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--uc-texto-suave);
+  }
+
+  app-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: var(--uc-verde-principal);
+    color: var(--uc-dorado-vivo);
+    font-size: 1.3rem;
+  }
+}
+
 /* ----------------------------------------------------------------- Ingreso */
 .auth {
   display: grid;
@@ -500,6 +686,11 @@
 
   .hero-marks {
     display: none;
+  }
+
+  .hero-controls {
+    width: 100%;
+    justify-content: center;
   }
 
   .search-hero-box button {

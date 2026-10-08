@@ -43,6 +43,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/courses/course-detail').then((m) => m.CourseDetailPage),
   },
   {
+    path: 'quienes-somos',
+    title: `Quiénes somos · ${SITE}`,
+    loadComponent: () => import('./features/about/about').then((m) => m.About),
+  },
+  {
+    path: 'nuestro-equipo',
+    title: `Nuestro equipo · ${SITE}`,
+    loadComponent: () => import('./features/about/team').then((m) => m.Team),
+  },
+  {
     path: 'ingresar',
     title: `Ingresar · ${SITE}`,
     loadComponent: () => import('./features/auth/login').then((m) => m.Login),
