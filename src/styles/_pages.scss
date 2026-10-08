@@ -16,41 +16,24 @@
 }
 
 /* ----------------------------------------------------------------- Portada: bienvenida
- * La portada ocupa todo el ancho de la ventana: el bloque de bienvenida va de borde a borde y
- * las demás secciones conservan el ancho de lectura del portal. */
-.page:has(> app-home) {
-  width: 100%;
-  padding-top: 0;
-}
-
-app-home > section:not(.hero) {
-  width: min(100% - 2 * var(--uc-margen), var(--uc-ancho-maximo));
-  margin-inline: auto;
-}
-
-/* Bloque oscuro de borde a borde con el titular en blanco y de mucho peso. Es un carrusel:
- * las diapositivas se deslizan de lado y el buscador queda fijo debajo. */
+ * El carrusel de bienvenida abre las páginas públicas y ocupa todo el ancho de la ventana; el
+ * contenido de cada página conserva su ancho de lectura. Bloque oscuro de borde a borde con el
+ * titular en blanco y de mucho peso: las diapositivas se deslizan de lado y el buscador queda fijo. */
 .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   padding-block: clamp(36px, 6vw, 84px) clamp(28px, 4vw, 48px);
-  background: linear-gradient(90deg, var(--uc-verde-oscuro) 0%, var(--uc-verde-principal) 34%);
+  /* La foto de la Universidad queda bajo un velo del verde institucional: se intuye, no compite con el texto. */
+  background:
+    linear-gradient(90deg, rgba(2, 44, 34, 0.96) 0%, rgba(6, 78, 59, 0.88) 45%, rgba(6, 78, 59, 0.72) 100%),
+    url('/imagenes/ucaldas.png') center / cover no-repeat,
+    var(--uc-verde-principal);
   color: rgba(255, 255, 255, 0.9);
 
   &::before {
     @include relieve(#ffffff, 0.2);
     inset: 0 0 0 34%;
-  }
-
-  /* El relieve se desvanece hacia el texto para que nunca compita con la lectura. */
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: 0 0 0 34%;
-    background: linear-gradient(90deg, var(--uc-verde-principal) 0%, rgba(6, 78, 59, 0.7) 34%, rgba(6, 78, 59, 0) 78%);
-    pointer-events: none;
   }
 
   .hero-text {
@@ -670,18 +653,16 @@ app-home > section:not(.hero) {
 /* ----------------------------------------------------------------- Pantallas pequeñas */
 @media (max-width: 759.98px) {
   .hero {
-    &::before,
-    &::after {
-      inset: 0;
-    }
-
     &::before {
+      inset: 0;
       opacity: 0.1;
     }
 
-    &::after {
-      background: linear-gradient(180deg, rgba(6, 78, 59, 0.75) 0%, rgba(6, 78, 59, 0.35) 100%);
-    }
+    /* Sin columna de texto a un lado, el velo cubre parejo para que se lea en cualquier punto. */
+    background:
+      linear-gradient(180deg, rgba(2, 44, 34, 0.92) 0%, rgba(6, 78, 59, 0.84) 100%),
+      url('/imagenes/ucaldas.png') center / cover no-repeat,
+      var(--uc-verde-principal);
   }
 
   .hero-marks {

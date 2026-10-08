@@ -8,6 +8,7 @@ import { Api } from './core/api';
 import { AuthService } from './core/auth';
 import { ADMIN_PERMISSIONS, Permission } from './core/models';
 import { Breadcrumbs } from './shared/breadcrumbs';
+import { HeroSlider } from './shared/hero-slider';
 import { Icon } from './shared/icon';
 
 /** Permisos que abren alguna vista del espacio de trabajo. */
@@ -19,9 +20,12 @@ const WORKSPACE_PERMISSIONS: string[] = [
   ...ADMIN_PERMISSIONS,
 ];
 
+/** Paginas publicas que abren con el carrusel de bienvenida. Las fichas de detalle no lo llevan. */
+const HERO_PATHS = ['/', '/iniciativas', '/recursos', '/cursos', '/quienes-somos', '/nuestro-equipo'];
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Breadcrumbs, Icon],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Breadcrumbs, HeroSlider, Icon],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -48,6 +52,9 @@ export class App implements OnInit {
 
   /** Ruta de la ultima pagina visitada, sin parametros; `null` antes de la primera navegacion. */
   private readonly path = signal<string | null>(null);
+
+  protected readonly showHero = computed(() => HERO_PATHS.includes(this.path() ?? ''));
+  protected readonly isHome = computed(() => this.path() === '/');
 
   constructor() {
     // Con sesion, el contador se carga al entrar y se refresca al navegar.

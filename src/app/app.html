@@ -118,6 +118,10 @@
   </div>
 }
 
+@if (showHero()) {
+  <app-hero-slider [main]="isHome()" />
+}
+
 <app-breadcrumbs />
 
 <main #main id="contenido" class="wrap page" tabindex="-1">
