@@ -10,6 +10,8 @@ import { ADMIN_PERMISSIONS, Permission } from './core/models';
 import { Breadcrumbs } from './shared/breadcrumbs';
 import { HeroSlider } from './shared/hero-slider';
 import { Icon } from './shared/icon';
+import { Reveal } from './shared/reveal';
+import { ScrollReveal } from './shared/scroll-reveal';
 
 /** Permisos que abren alguna vista del espacio de trabajo. */
 const WORKSPACE_PERMISSIONS: string[] = [
@@ -25,7 +27,7 @@ const HERO_PATHS = ['/', '/iniciativas', '/recursos', '/cursos', '/quienes-somos
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Breadcrumbs, HeroSlider, Icon],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Breadcrumbs, HeroSlider, Icon, Reveal, ScrollReveal],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

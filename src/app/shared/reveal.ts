@@ -1,14 +1,18 @@
-import { afterNextRender, Component, computed, DestroyRef, Directive, ElementRef, inject, input, signal } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, DestroyRef, Directive, ElementRef, inject, input, signal } from '@angular/core';
 
 /**
- * Marca un bloque para que su texto aparezca al entrar en pantalla. Sin JavaScript (o sin
- * IntersectionObserver) el bloque no se oculta nunca: la animacion es un extra, no una condicion.
+ * Marca un bloque para que su texto aparezca al entrar en pantalla. Con `appRevealRepeat` el
+ * bloque se oculta al salir de pantalla y vuelve a aparecer cada vez que regresa (el pie de pagina).
+ * Sin JavaScript (o sin IntersectionObserver) el bloque no se oculta nunca: la animacion es un
+ * extra, no una condicion.
  */
 @Directive({
   selector: '[appReveal]',
   host: { '[class.reveal]': 'armed()', '[class.visible]': 'visible()' },
 })
 export class Reveal {
+  readonly repeat = input(false, { alias: 'appRevealRepeat', transform: booleanAttribute });
+
   protected readonly armed = signal(false);
   protected readonly visible = signal(false);
 
@@ -20,13 +24,19 @@ export class Reveal {
       if (!('IntersectionObserver' in window)) return;
 
       this.armed.set(true);
+      const repeat = this.repeat();
       const observer = new IntersectionObserver(
         (entries) => {
+          if (repeat) {
+            // Se oculta al salir por completo y reaparece al volver: cada regreso se anima de nuevo.
+            this.visible.set(entries[entries.length - 1].isIntersecting);
+            return;
+          }
           if (!entries.some((entry) => entry.isIntersecting)) return;
           this.visible.set(true);
           observer.disconnect();
         },
-        { threshold: 0.15 },
+        repeat ? { rootMargin: '0px 0px -6% 0px' } : { threshold: 0.15 },
       );
       observer.observe(element);
       destroyRef.onDestroy(() => observer.disconnect());

@@ -23,7 +23,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: clamp(36px, 6vw, 84px) clamp(28px, 4vw, 48px);
+  padding-block: clamp(20px, 2.6vw, 34px) clamp(16px, 1.8vw, 22px);
   /* La foto de la Universidad queda bajo un velo del verde institucional: se intuye, no compite con el texto. */
   background:
     linear-gradient(90deg, rgba(2, 44, 34, 0.96) 0%, rgba(6, 78, 59, 0.88) 45%, rgba(6, 78, 59, 0.72) 100%),
@@ -47,7 +47,7 @@
   h1,
   .hero-title {
     color: #ffffff;
-    font-size: clamp(2.4rem, 1.3rem + 4.8vw, 4.5rem);
+    font-size: clamp(2rem, 1.2rem + 3.2vw, 3.2rem);
     font-weight: 800;
     line-height: 1.02;
     letter-spacing: -0.035em;
@@ -120,7 +120,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px 32px;
-  margin-top: clamp(24px, 3vw, 40px);
+  margin-top: clamp(16px, 2vw, 24px);
 
   > div:first-child {
     flex: 1 1 420px;
