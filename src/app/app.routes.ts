@@ -78,6 +78,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/account/notifications').then((m) => m.NotificationsPage),
   },
 
+  // --- Estudiante
+  {
+    path: 'guia-ia',
+    title: `Guía de estudio con IA · ${SITE}`,
+    canActivate: [requirePermission(Permission.StudyGuide)],
+    loadComponent: () => import('./features/guide/study-guide').then((m) => m.StudyGuide),
+  },
+
   // --- Autor
   {
     path: 'mis-iniciativas',

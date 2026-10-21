@@ -71,6 +71,17 @@
           <li><a routerLink="/mi-perfil" routerLinkActive="active" ariaCurrentWhenActive="page">Mi perfil</a></li>
         </ul>
 
+        <!-- La guía es un recurso aparte: grupo propio, tras el separador. -->
+        @if (auth.can(Permission.StudyGuide)) {
+          <ul>
+            <li>
+              <a routerLink="/guia-ia" routerLinkActive="active" ariaCurrentWhenActive="page" class="tab-ai">
+                <app-icon name="sparkles" />Guía IA
+              </a>
+            </li>
+          </ul>
+        }
+
         @if (hasWorkspace()) {
           <ul>
             @if (auth.can(Permission.InitiativeManage)) {

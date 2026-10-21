@@ -9,6 +9,8 @@ import {
   CourseDetail,
   CourseInput,
   CourseSummary,
+  GuideAnswer,
+  GuideMode,
   InitiativeDetail,
   InitiativeInput,
   InitiativeSummary,
@@ -111,6 +113,9 @@ export class Api {
   notifications = () => this.get<{ items: NotificationRecord[]; unread: number }>('/me/notifications');
   markNotificationRead = (id: string) => this.post<void>(`/me/notifications/${id}/read`);
   markAllNotificationsRead = () => this.post<void>('/me/notifications/read-all');
+
+  // --- Guia de estudio con IA
+  askGuide = (question: string, mode: GuideMode) => this.post<GuideAnswer>('/study-guide/ask', { question, mode });
 
   // --- Portal publico
   catalogs = () => this.get<Catalogs>('/catalogs');

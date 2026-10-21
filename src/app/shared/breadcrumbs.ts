@@ -29,6 +29,7 @@ const SECTIONS: Record<string, Section> = {
   'mi-area': { label: 'Mi área' },
   'mi-perfil': { label: 'Mi perfil', workspace: true },
   notificaciones: { label: 'Notificaciones', workspace: true },
+  'guia-ia': { label: 'Guía de estudio con IA', workspace: true },
   'mis-iniciativas': {
     label: 'Mis iniciativas',
     workspace: true,

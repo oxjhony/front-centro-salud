@@ -41,6 +41,7 @@ const LABELS: Record<string, string> = {
   ACADEMIC_MANAGER: 'Gestor académico',
   FUNCTIONAL_ADMIN: 'Administrador funcional',
   TECHNICAL_ADMIN: 'Administrador técnico',
+  STUDENT: 'Estudiante',
   // Entidades publicables
   initiatives: 'Iniciativa',
   resources: 'Recurso',

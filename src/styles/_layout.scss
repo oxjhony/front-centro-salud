@@ -265,6 +265,23 @@
   }
 }
 
+/* La guía de IA se distingue con su destello dorado, que titila de vez en cuando. */
+.tabs a.tab-ai .icon {
+  color: var(--uc-dorado-firme);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tabs a.tab-ai .icon {
+    animation: tab-ai-twinkle 4.5s var(--uc-curva) infinite;
+  }
+}
+
+@keyframes tab-ai-twinkle {
+  0%, 82%, 100% { transform: scale(1) rotate(0); }
+  88% { transform: scale(1.3) rotate(18deg); }
+  94% { transform: scale(0.92) rotate(-6deg); }
+}
+
 /* Avisos: la campana vive junto al usuario; el contador dorado dice cuántos hay sin leer. */
 .bell {
   position: relative;

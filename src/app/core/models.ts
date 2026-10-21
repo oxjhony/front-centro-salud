@@ -375,7 +375,28 @@ export const Permission = {
   TaxonomyManage: 'taxonomy:manage',
   AuditView: 'audit:view',
   IntegrationOperate: 'integration:operate',
+  StudyGuide: 'study:guide',
 } as const;
+
+// --- Guia de estudio con IA ---------------------------------------------------------------------
+
+/** Preguntar, explicar un fragmento o practicar con preguntas de repaso. */
+export type GuideMode = 'ask' | 'explain' | 'quiz';
+
+export interface GuideSource {
+  type: SearchableType;
+  id: string;
+  title: string;
+  excerpt: string;
+}
+
+export interface GuideAnswer {
+  mode: GuideMode;
+  answer: string;
+  /** true si la redacto el modelo de lenguaje; false si son extractos del material. */
+  generated: boolean;
+  sources: GuideSource[];
+}
 
 /** Permisos que dan acceso al panel de administracion (basta uno). */
 export const ADMIN_PERMISSIONS: string[] = [
