@@ -12,6 +12,10 @@ import {
   GuideAnswer,
   GuideMode,
   InitiativeDetail,
+  Material,
+  MaterialReview,
+  MaterialSearch,
+  MaterialsOverview,
   InitiativeInput,
   InitiativeSummary,
   IntegrationLogRecord,
@@ -98,6 +102,10 @@ export class Api {
     return firstValueFrom(this.http.put<T>(this.base + path, body));
   }
 
+  private patch<T>(path: string, body: unknown): Promise<T> {
+    return firstValueFrom(this.http.patch<T>(this.base + path, body));
+  }
+
   private delete<T>(path: string): Promise<T> {
     return firstValueFrom(this.http.delete<T>(this.base + path));
   }
@@ -116,6 +124,15 @@ export class Api {
 
   // --- Guia de estudio con IA
   askGuide = (question: string, mode: GuideMode) => this.post<GuideAnswer>('/study-guide/ask', { question, mode });
+
+  // --- Clasificacion del material de Moodle
+  materialsOverview = () => this.get<MaterialsOverview>('/materials/review');
+  importMaterials = () => this.post<MaterialsOverview>('/materials/import');
+  classifyMaterials = () => this.post<MaterialsOverview>('/materials/classify');
+  approveConfidentMaterials = () => this.post<MaterialsOverview>('/materials/approve-confident');
+  resetMaterials = () => this.post<MaterialsOverview>('/materials/reset');
+  reviewMaterial = (id: string, input: MaterialReview) => this.patch<Material>(`/materials/${id}/review`, input);
+  searchMaterials = (query: Query) => this.get<MaterialSearch>('/materials/search', query);
 
   // --- Portal publico
   catalogs = () => this.get<Catalogs>('/catalogs');

@@ -51,8 +51,8 @@ describe('App: navegación según la sesión', () => {
     };
   };
 
-  // Navegacion principal: la portada y los tres caminos del portal.
-  const PUBLIC = ['Inicio', 'Iniciativas', 'Recursos', 'Cursos'];
+  // Navegacion principal: la portada, los tres caminos del portal y quienes lo hacen.
+  const PUBLIC = ['Inicio', 'Iniciativas', 'Recursos', 'Cursos', 'Quiénes somos', 'Nuestro equipo'];
   // Pestanas de la barra personal que tiene cualquier persona con sesion.
   const PERSONAL = ['Mi área', 'Mi perfil'];
 
@@ -86,8 +86,8 @@ describe('App: navegación según la sesión', () => {
   it('con sesión muestra el nombre, el acceso a su área, las notificaciones sin leer y el botón para salir', async () => {
     const { element } = await render(user([]), 3);
 
-    expect(element.querySelector('.session .user-pill')?.textContent).toContain('Persona de Prueba');
-    expect(element.querySelector('.session nav a[href="/mi-area"]')?.textContent).toContain('Mi área');
+    expect(element.querySelector('.session .user-pill')?.getAttribute('aria-label')).toContain('Persona de Prueba');
+    expect(element.querySelector('.account-bar nav a[href="/mi-area"]')?.textContent).toContain('Mi área');
     expect(element.querySelector('.notification-badge')?.textContent).toContain('3');
     expect(element.querySelector('.session button')?.textContent).toContain('Salir');
   });

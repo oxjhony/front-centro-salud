@@ -30,6 +30,8 @@ const SECTIONS: Record<string, Section> = {
   'mi-perfil': { label: 'Mi perfil', workspace: true },
   notificaciones: { label: 'Notificaciones', workspace: true },
   'guia-ia': { label: 'Guía de estudio con IA', workspace: true },
+  material: { label: 'Material de cursos', workspace: true },
+  clasificacion: { label: 'Clasificación del material', workspace: true },
   'mis-iniciativas': {
     label: 'Mis iniciativas',
     workspace: true,

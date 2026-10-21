@@ -19,6 +19,7 @@ const WORKSPACE_PERMISSIONS: string[] = [
   Permission.ResourceManage,
   Permission.CourseManage,
   Permission.ContentReview,
+  Permission.MaterialClassify,
   ...ADMIN_PERMISSIONS,
 ];
 
@@ -121,6 +122,10 @@ export class App implements OnInit {
       .slice(0, 2)
       .map((word) => word[0].toUpperCase())
       .join('');
+  }
+
+  protected firstName(name: string): string {
+    return name.split(/\s+/)[0] ?? name;
   }
 
   private async refreshUnread(): Promise<void> {

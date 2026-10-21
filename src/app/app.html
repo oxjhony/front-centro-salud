@@ -53,57 +53,9 @@
       </ul>
     </nav>
 
-    @if (!auth.user()) {
-      <div class="session">
-        <a routerLink="/ingresar" class="btn-login"><app-icon name="log-in" /><span>Ingresar</span></a>
-      </div>
-    }
-  </div>
-</header>
-
-<!-- Segundo nivel: la barra personal de quien tiene sesión. Accesos en pestañas; avisos, usuario y salir juntos. -->
-@if (auth.user(); as user) {
-  <div class="session account-bar">
-    <div class="wrap account-inner">
-      <nav #tabs class="tabs" aria-label="Mi espacio">
-        <ul>
-          <li><a routerLink="/mi-area" routerLinkActive="active" ariaCurrentWhenActive="page">Mi área</a></li>
-          <li><a routerLink="/mi-perfil" routerLinkActive="active" ariaCurrentWhenActive="page">Mi perfil</a></li>
-        </ul>
-
-        <!-- La guía es un recurso aparte: grupo propio, tras el separador. -->
-        @if (auth.can(Permission.StudyGuide)) {
-          <ul>
-            <li>
-              <a routerLink="/guia-ia" routerLinkActive="active" ariaCurrentWhenActive="page" class="tab-ai">
-                <app-icon name="sparkles" />Guía IA
-              </a>
-            </li>
-          </ul>
-        }
-
-        @if (hasWorkspace()) {
-          <ul>
-            @if (auth.can(Permission.InitiativeManage)) {
-              <li><a routerLink="/mis-iniciativas" routerLinkActive="active" ariaCurrentWhenActive="page">Mis iniciativas</a></li>
-            }
-            @if (auth.can(Permission.ResourceManage)) {
-              <li><a routerLink="/mis-recursos" routerLinkActive="active" ariaCurrentWhenActive="page">Mis recursos</a></li>
-            }
-            @if (auth.can(Permission.CourseManage)) {
-              <li><a routerLink="/mis-cursos" routerLinkActive="active" ariaCurrentWhenActive="page">Mis cursos</a></li>
-            }
-            @if (auth.can(Permission.ContentReview)) {
-              <li><a routerLink="/revision" routerLinkActive="active" ariaCurrentWhenActive="page">Revisión</a></li>
-            }
-            @if (auth.canAny(adminPermissions)) {
-              <li><a routerLink="/administracion" routerLinkActive="active" ariaCurrentWhenActive="page">Administración</a></li>
-            }
-          </ul>
-        }
-      </nav>
-
-      <div class="account">
+    <!-- Sesión: el visitante ve «Ingresar»; con sesión, avisos, quién es y salir en una sola píldora. -->
+    @if (auth.user(); as user) {
+      <div class="session account">
         <a
           routerLink="/notificaciones"
           routerLinkActive="active"
@@ -119,12 +71,80 @@
             <span class="notification-badge" aria-hidden="true">{{ count }}</span>
           }
         </a>
-        <span class="user-pill" [title]="user.email">
+        <a
+          class="user-pill"
+          routerLink="/mi-perfil"
+          [title]="user.displayName + ' · ' + user.email"
+          [attr.aria-label]="'Mi perfil: ' + user.displayName"
+        >
           <span class="avatar" aria-hidden="true">{{ initials(user.displayName) }}</span>
-          <span class="user-name">{{ user.displayName }}</span>
-        </span>
-        <button type="button" class="btn-logout" (click)="logout()"><app-icon name="log-out" /><span>Salir</span></button>
+          <span class="user-name" aria-hidden="true">{{ firstName(user.displayName) }}</span>
+        </a>
+        <button type="button" class="btn-logout" (click)="logout()" title="Salir">
+          <app-icon name="log-out" /><span class="visually-hidden">Salir</span>
+        </button>
       </div>
+    } @else {
+      <div class="session">
+        <a routerLink="/ingresar" class="btn-login"><app-icon name="log-in" /><span>Ingresar</span></a>
+      </div>
+    }
+  </div>
+</header>
+
+<!-- Segundo nivel: los accesos personales, en pestañas, según los permisos de la persona. -->
+@if (auth.user()) {
+  <div class="account-bar">
+    <div class="wrap account-inner">
+      <nav #tabs class="tabs" aria-label="Mi espacio">
+        <ul>
+          <li><a routerLink="/mi-area" routerLinkActive="active" ariaCurrentWhenActive="page">Mi área</a></li>
+          <li><a routerLink="/mi-perfil" routerLinkActive="active" ariaCurrentWhenActive="page">Mi perfil</a></li>
+        </ul>
+
+        <!-- El estudio es un recurso aparte: grupo propio, tras el separador. -->
+        @if (auth.can(Permission.StudyGuide) || auth.can(Permission.MaterialView)) {
+          <ul>
+            @if (auth.can(Permission.StudyGuide)) {
+              <li>
+                <a routerLink="/guia-ia" routerLinkActive="active" ariaCurrentWhenActive="page" class="tab-ai">
+                  <app-icon name="sparkles" />Guía IA
+                </a>
+              </li>
+            }
+            @if (auth.can(Permission.MaterialView)) {
+              <li>
+                <a routerLink="/material" routerLinkActive="active" ariaCurrentWhenActive="page">
+                  <app-icon name="folder-search" />Material
+                </a>
+              </li>
+            }
+          </ul>
+        }
+
+        @if (hasWorkspace()) {
+          <ul>
+            @if (auth.can(Permission.InitiativeManage)) {
+              <li><a routerLink="/mis-iniciativas" routerLinkActive="active" ariaCurrentWhenActive="page">Mis iniciativas</a></li>
+            }
+            @if (auth.can(Permission.ResourceManage)) {
+              <li><a routerLink="/mis-recursos" routerLinkActive="active" ariaCurrentWhenActive="page">Mis recursos</a></li>
+            }
+            @if (auth.can(Permission.CourseManage)) {
+              <li><a routerLink="/mis-cursos" routerLinkActive="active" ariaCurrentWhenActive="page">Mis cursos</a></li>
+            }
+            @if (auth.can(Permission.MaterialClassify)) {
+              <li><a routerLink="/clasificacion" routerLinkActive="active" ariaCurrentWhenActive="page">Clasificación</a></li>
+            }
+            @if (auth.can(Permission.ContentReview)) {
+              <li><a routerLink="/revision" routerLinkActive="active" ariaCurrentWhenActive="page">Revisión</a></li>
+            }
+            @if (auth.canAny(adminPermissions)) {
+              <li><a routerLink="/administracion" routerLinkActive="active" ariaCurrentWhenActive="page">Administración</a></li>
+            }
+          </ul>
+        }
+      </nav>
     </div>
   </div>
 }

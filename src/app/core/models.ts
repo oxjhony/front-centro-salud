@@ -376,6 +376,8 @@ export const Permission = {
   AuditView: 'audit:view',
   IntegrationOperate: 'integration:operate',
   StudyGuide: 'study:guide',
+  MaterialClassify: 'material:classify',
+  MaterialView: 'material:view',
 } as const;
 
 // --- Guia de estudio con IA ---------------------------------------------------------------------
@@ -405,3 +407,74 @@ export const ADMIN_PERMISSIONS: string[] = [
   Permission.AuditView,
   Permission.IntegrationOperate,
 ];
+
+// --- Clasificacion del material de Moodle --------------------------------------------------------
+
+export type MaterialStatus = 'PENDING' | 'PROPOSED' | 'APPROVED' | 'REJECTED';
+/** Quien puso cada faceta: una regla, la IA o la persona que reviso. */
+export type MaterialOrigin = 'regla' | 'ia' | 'persona';
+export type MaterialFacet = 'theme' | 'type' | 'unit' | 'keywords';
+
+export interface Material {
+  id: string;
+  cmid: number;
+  section: number;
+  sectionName: string;
+  position: number;
+  moduleType: 'resource' | 'assign' | 'forum' | 'url' | 'page' | 'quiz' | 'folder';
+  format: string | null;
+  name: string;
+  url: string;
+  status: MaterialStatus;
+  theme: { id: string; name: string; parent: string | null } | null;
+  materialType: string | null;
+  unit: { number: number; name: string } | null;
+  keywords: string[];
+  confidence: number | null;
+  rationale: string | null;
+  origins: Partial<Record<MaterialFacet, MaterialOrigin>>;
+  reviewedAt: string | null;
+}
+
+export interface MaterialsOverview {
+  course: { ref: string; name: string };
+  materials: Material[];
+  units: { number: number; name: string }[];
+  sections: number;
+  stats: {
+    total: number;
+    pending: number;
+    proposed: number;
+    approved: number;
+    rejected: number;
+    confident: number;
+    reviewed: number;
+    unchanged: number;
+  };
+  vocabulary: { themes: { id: string; name: string; parent: string | null }[]; types: string[] };
+  usedAi?: boolean;
+}
+
+export interface MaterialReview {
+  decision: 'approve' | 'reject';
+  themeId?: string | null;
+  materialType?: string | null;
+  unitNumber?: number | null;
+  unitName?: string;
+  keywords?: string[];
+}
+
+export interface FacetCount<T> {
+  value: T;
+  label: string;
+  count: number;
+}
+
+export interface MaterialSearch {
+  course: { ref: string; name: string };
+  /** Material aprobado del curso; 0 quiere decir que el gestor aun no lo clasifica. */
+  available: number;
+  interpretation: { text: string; type: string | null; unit: number | null };
+  items: Material[];
+  facets: { themes: FacetCount<string>[]; types: FacetCount<string>[]; units: FacetCount<number>[] };
+}

@@ -71,7 +71,9 @@ const SOURCE_ROUTES: Record<GuideSource['type'], string> = {
         <div>
           <p class="eyebrow">Guía de estudio con IA</p>
           <h1>¿Qué quieres aprender hoy{{ firstName() ? ', ' + firstName() : '' }}?</h1>
-          <p class="lead">Respuestas construidas solo con el material publicado en el portal, siempre con su fuente.</p>
+          <p class="lead">Organizado con los materiales base publicados en la plataforma.</p>
+          <!-- Nota de trabajo para la presentación: quitar cuando el RAG esté listo. -->
+          <p class="todo-note">Pendiente: organizar RAG luego</p>
         </div>
       </header>
 
@@ -200,6 +202,13 @@ const SOURCE_ROUTES: Record<GuideSource['type'], string> = {
 
       .lead {
         margin: 0;
+      }
+
+      .todo-note {
+        margin: 4px 0 0;
+        color: #dc2626;
+        font-size: 0.7rem;
+        font-weight: 700;
       }
     }
 
@@ -385,8 +394,10 @@ const SOURCE_ROUTES: Record<GuideSource['type'], string> = {
       color: var(--uc-peligro-texto);
     }
 
+    /* La IA separa ideas en párrafos y listas con guion: se respetan los saltos de línea. */
     .answer {
       line-height: 1.6;
+      white-space: pre-line;
     }
 
     .origin {

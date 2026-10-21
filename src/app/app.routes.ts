@@ -85,6 +85,20 @@ export const routes: Routes = [
     canActivate: [requirePermission(Permission.StudyGuide)],
     loadComponent: () => import('./features/guide/study-guide').then((m) => m.StudyGuide),
   },
+  {
+    path: 'material',
+    title: `Material de cursos · ${SITE}`,
+    canActivate: [requirePermission(Permission.MaterialView)],
+    loadComponent: () => import('./features/materials/material-search').then((m) => m.MaterialSearchPage),
+  },
+
+  // --- Clasificacion del material de Moodle (gestor academico)
+  {
+    path: 'clasificacion',
+    title: `Clasificación del material · ${SITE}`,
+    canActivate: [requirePermission(Permission.MaterialClassify)],
+    loadComponent: () => import('./features/materials/classification').then((m) => m.Classification),
+  },
 
   // --- Autor
   {
